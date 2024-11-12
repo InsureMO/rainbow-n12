@@ -1,0 +1,53 @@
+# Page::report-generate
+
+## Section::::
+
+- DropdownTree::Report::criteria.reportCode
+	- pos: 6
+	- initExpandLevel: 3
+	- options: @ext.codes.report
+	- please: Please select...
+	- couldSelect: @ext.node-could-select
+	- disabled:
+		- on: control.generating
+		- handle:
+		  ```ts
+		  return !!model.control.generating;
+		  ```
+- Button::
+	- $fc, data-fit
+	- text: Load Settings
+	- click: @ext.load-settings
+	- disabled:
+		- on: control.generating, criteria.reportCode
+		- handle:
+		  ```ts
+		  return !!model.control.generating || VUtils.isBlank(model.criteria.reportCode);
+		  ```
+
+## Section::Generating
+
+- data-dynamic
+- visible:
+	- on: control.generating
+	- handle:
+	  ```ts
+	  return !!model.control.generating;
+	  ```
+- Dropdown::File Type::condition.fileType
+	- place: col: 1, cols: 3
+	- options: @ext.codes.generateFileType
+	- !clearable
+	- please: Please select...
+	- required
+- Box::
+	- $fc, data-dense-labels
+	- Button::
+		- text: Generate
+		- click: @ext.generate
+		- data-fit
+	- Button::
+		- text: Cancel
+		- click: @ext.cancel
+		- ink: waive
+		- data-fit

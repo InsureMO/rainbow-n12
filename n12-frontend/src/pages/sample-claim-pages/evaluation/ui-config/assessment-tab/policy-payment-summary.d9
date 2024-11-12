@@ -1,0 +1,17 @@
+##### Section::
+
+- collapsible, data-policy-payment-summary
+- marker: policy-payment-summary
+- title: Box
+	- data-dense-labels, data-as-section-title
+	- Caption::claim.assessment.policy.payment-summary.title
+	- Caption::(
+	- Caption::claim.assessment.policy.payment-summary.total-disbursement-amount
+	- Dropdown::::totalDisbursementCurrency
+		- disabled, data-as-label, data-omit-padding
+		- options: @ext.codes.currency
+	- Label::::totalDisbursementAmount
+		- valueToLabel: `$.nf2(value)`
+	- Caption::)
+- Box::$$products-table
+- Box::$$adjustment-items-table

@@ -1,0 +1,194 @@
+# Page::claim-acceptance-policy-acceptance
+
+- data-fix-bottom-button-bar
+
+## Box::
+
+- data-fix-title
+- pos: 12
+
+- Caption::claim.acceptance.policy-acceptance.case-no
+	- !$fc
+- Label::::data.caseNo
+
+- Box::$$registration-base-section
+- Box::
+	- data-as-button-bar, data-sparse
+	- pos: 12
+	- Caption::claim.actions-and-supporting
+	- Button::
+		- text: claim.action.image
+		- fill: link
+		- click: @ext.ans.image.click
+		- data-fit-link
+	- Button::
+		- text: claim.action.doc-checklist
+		- fill: link
+		- click: @ext.ans.doc-checklist.click
+		- data-fit-link
+	- Button::
+		- text: claim.action.medical-bill
+		- fill: link
+		- click: @ext.ans.medical-bill.click
+		- data-fit-link
+	- Button::
+		- text: claim.action.history
+		- fill: link
+		- click: @ext.ans.history.click
+		- data-fit-link
+
+## Tabs::
+
+### Tab::claim.claim-issue.title
+
+- marker: issue-tab
+- badge: Badge
+	- property: data.claimIssues
+	- valueToLabel:
+	  ```ts
+	  const count = value?.length ?? 0;
+	  const opened = value?.filter(issue => issue.status !== 'closed')?.length ?? 0;
+	  return `${opened} / ${count}`;
+	  ```
+	- ink: danger
+
+- Box::$$claim-issue-table-section
+
+- Box::$$query-letter-table-section
+
+- Box::$$internal-query-table-section
+
+- Box::$$escalation-table-section
+
+- Box::$$investigation-table-section
+
+### Tab::claim.acceptance-decision.title
+
+- marker: decision-tab
+
+#### Ribs::::data.decision.policies
+
+- !expandable, !addable, !removable, data-as-section
+- initExpanded: `return true`
+- caption: Box
+	- data-labels
+	- Caption::claim.acceptance-decision.policy-title
+	- Label::::policyNo
+		- data-as-link
+		- click: @ext.decision.policy.view.click
+- Input::claim.acceptance-decision.policy-holder::policyHolderName
+	- disabled
+- Dropdown::claim.acceptance-decision.current-status::currentStatus
+	- disabled
+	- options: @ext.codes.policyStatus
+- Dropdown::claim.acceptance-decision.status-at-event::statusAtEvent
+	- disabled
+	- options: @ext.codes.policyStatus
+- Dropdown::claim.acceptance-decision.currency::currency
+	- disabled
+	- options: @ext.codes.currency
+- Dropdown::claim.acceptance-decision.bankruptcy-involved::bankruptcyInvolved
+	- disabled
+	- options: @ext.codes.yesNo
+- Input::claim.acceptance-decision.service-agent::serviceAgentName
+	- disabled
+- Input::claim.acceptance-decision.service-agent-mobile::serviceAgentMobile
+	- disabled
+- Table::
+	- property: products
+	- expandable, !addable, !removable
+	- fixedLeadColumns: 5
+	- getElementKey: @ext.decision.policy.product.getElementKey
+	- headers:
+		- claim.acceptance-decision.product.name: 1fr
+		- claim.acceptance-decision.product.acceptable: 100
+		- claim.acceptance-decision.product.accept: 100
+		- claim.acceptance-decision.product.notified-amount: 140
+		- claim.acceptance-decision.product.sum-assured: 140
+	- Box::
+		- data-dense-labels
+		- Label::::code
+		- Caption::|
+		- Label::::name
+	- Dropdown::::acceptable
+		- disabled, data-as-label
+		- options: @ext.codes.yesNo
+	- Dropdown::::accept
+		- options: @ext.codes.yesNo
+		- !clearable
+		- data-as-label: `return options.model.acceptable !== true`
+		- disabled:
+			- on: acceptable
+			- handle:
+			  ```ts
+			  return model.acceptable !== true;
+			  ```
+	- Box::
+		- Input::::notifiedAmount
+			- data-in-table-cell-and-box
+			- visible:
+				- on: acceptable
+				- handle:
+				  ```ts
+				  return model.acceptable === true;
+				  ```
+		- Caption::vars.na
+			- data-not-available
+			- visible:
+				- on: acceptable
+				- handle:
+				  ```ts
+				  return model.acceptable !== true;
+				  ```
+	- Label::::sumAssured
+		- valueToLabel: `$.nf2(value)`
+	- Label::claim.props.insured-name::insuredName
+	- Dropdown::claim.acceptance-decision.product.status-at-event::statusAtEvent
+		- disabled
+		- options: @ext.codes.policyStatus
+	- Dropdown::claim.acceptance-decision.product.current-status::currentStatus
+		- disabled
+		- options: @ext.codes.policyStatus
+	- Label::claim.acceptance-decision.product.commencement-date::commencementDate
+	- Label::claim.acceptance-decision.product.expiry-date::expiryDate
+	- Dropdown::claim.acceptance-decision.product.reinsurance::reinsurance
+		- disabled
+		- options: @ext.codes.yesNo
+
+#### Section::claim.acceptance-decision.summary-title::data.decision
+
+- data-2nd
+
+- Dropdown::claim.acceptance-decision.decision::decision
+	- options: @ext.codes.acceptanceDecision
+	- please: dropdown.placeholder.please-select
+	- required
+- Dropdown::claim.acceptance-decision.reason::reason
+	- options: @ext.codes.acceptanceReason
+	- please: dropdown.placeholder.please-select
+- Date::claim.acceptance-decision.price-eff-date::priceEffectiveDate
+- Textarea::claim.acceptance-decision.comment-to-client::commentToClient
+	- pos: 12
+
+## ButtonBar::
+
+- data-fix-bottom
+
+- Button::
+	- text: claim.action.comment
+	- click: @ext.comment.click
+	- ink: info
+- Box::
+	- data-space-grabber
+- Button::
+	- text: page.common.button.previous
+	- click: @ext.previous.click
+	- fill: plain
+	- ink: waive
+- Button::
+	- text: claim.action.reload-policy
+	- click: @ext.reload-policy.click
+	- fill: plain
+- Button::
+	- text: page.common.button.submit
+	- click: @ext.submit.click

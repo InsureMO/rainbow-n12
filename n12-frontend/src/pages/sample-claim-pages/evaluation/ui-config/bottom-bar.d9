@@ -1,0 +1,39 @@
+## ButtonBar::
+
+- data-fix-bottom
+
+- Dropdown::::control.pageNavigateTo
+	- data-page-navigator
+	- options: @ext.codes.assessmentTabLocations
+	- !clearable
+	- please: claim.action.page-navigator
+	- valueChanged: @ext.assessment.page-navigator.value-changed
+	- visible:
+		- on: control.activeTab
+		- handle:
+		  ```ts
+		  return model.control.activeTab === 'assessment-tab';
+		  ```
+- Button::
+	- text: claim.action.comment
+	- click: @ext.comment.click
+	- ink: info
+- Box::
+	- data-space-grabber
+- Button::
+	- text: claim.disbursement-plan.add-payee
+	- click: @ext.disbursement-plan.add-payee.click
+	- fill: plain
+	- visible:
+		- on: control.activeTab
+		- handle:
+		  ```ts
+		  return model.control.activeTab === 'disbursement-plan-tab';
+		  ```
+- Button::
+	- text: claim.action.reload-policy
+	- click: @ext.reload-policy.click
+	- fill: plain
+- Button::
+	- text: page.common.button.submit
+	- click: @ext.submit.click

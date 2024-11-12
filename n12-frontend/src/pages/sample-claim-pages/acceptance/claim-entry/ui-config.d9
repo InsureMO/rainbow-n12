@@ -1,0 +1,65 @@
+# Page::claim-acceptance-claim-entry
+
+- data-fix-bottom-button-bar
+
+## Box::
+
+- data-fix-title
+- pos: 12
+
+- Caption::claim.acceptance.claim-entry.case-no
+	- !$fc
+- Label::::data.caseNo
+
+- Box::$$registration-base-section
+- Box::
+	- data-as-button-bar, data-sparse
+	- pos: 12
+	- Caption::claim.actions-and-supporting
+	- Button::
+		- text: claim.action.image
+		- fill: link
+		- click: @ext.ans.image.click
+		- data-fit-link
+	- Button::
+		- text: claim.action.doc-checklist
+		- fill: link
+		- click: @ext.ans.doc-checklist.click
+		- data-fit-link
+	- Button::
+		- text: claim.action.medical-bill
+		- fill: link
+		- click: @ext.ans.medical-bill.click
+		- data-fit-link
+	- Button::
+		- text: claim.action.history
+		- fill: link
+		- click: @ext.ans.history.click
+		- data-fit-link
+
+- Box::$$insured-base-section
+
+- Box::$$claim-base-section
+
+- Box::$$additional-base-section
+
+- Box::$$reporter-base-section
+
+## ButtonBar::
+
+- data-fix-bottom
+
+- Button::
+	- text: claim.action.comment
+	- click: @ext.comment.click
+	- ink: info
+- Box::
+	- data-space-grabber
+- Button::
+	- text: page.common.button.save
+	- click: @ext.save.click
+	- fill: plain
+- Button::
+	- text: page.common.button.next
+	- click: @ext.next.click
+

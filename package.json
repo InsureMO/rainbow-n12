@@ -1,0 +1,19 @@
+{
+	"private": true,
+	"workspaces": [
+		"n12-shared-model",
+		"n12-frontend",
+		"n12-backend"
+	],
+	"scripts": {
+		"build-share-model": "cd ./n12-shared-model && yarn build",
+		"build-frontend": "cd ./n12-frontend && yarn build",
+		"start-frontend": "cd ./n12-frontend && yarn start",
+		"build-backend": "cd ./n12-backend && yarn build",
+		"start-backend": "cd ./n12-backend && yarn start"
+	},
+	"volta": {
+		"node": "22.11.0",
+		"yarn": "1.22.21"
+	}
+}

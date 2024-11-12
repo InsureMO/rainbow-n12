@@ -1,0 +1,17 @@
+- Section::claim.assessment.product.claim-decision.title
+	- data-3rd, data-product-claim-decision
+	- marker: product-claim-decision
+	- Dropdown::claim.assessment.product.claim-decision.decision::claimDecision
+		- options: @ext.codes.claimDecision
+		- !clearable
+		- required
+	- Dropdown::claim.assessment.product.claim-decision.claim-decision-reason::claimDecisionReason
+		- options: @ext.codes.claimDecisionReason
+		- !clearable
+	- Dropdown::claim.assessment.product.claim-decision.to-inforce-product::inForce
+		- options: @ext.codes.yesNo
+		- !clearable
+		- required
+	- Input::claim.assessment.product.claim-decision.termination-effective-date::terminationEffectiveDate
+	- Textarea::claim.assessment.product.claim-decision.comment-to-client::commentToClient
+		- pos : 12

@@ -1,0 +1,47 @@
+# Page::claim-registration-insured
+
+- data-fix-bottom-button-bar
+
+## Box::
+
+- data-fix-title
+- pos: 12
+
+- Caption::claim.registration.case-no
+	- !$fc
+- Label::::data.caseNo
+
+- Box::$$registration-base-section
+- Box::
+	- data-as-button-bar, data-sparse
+	- pos: 12
+	- Caption::claim.actions-and-supporting
+	- Button::
+		- text: claim.action.image
+		- fill: link
+		- click: @ext.ans.image.click
+		- data-fit-link
+
+- Box::$$insured-base-section
+
+- Box::$$claim-base-section
+
+- Box::$$reporter-base-section
+
+## ButtonBar::
+
+- data-fix-bottom
+
+- Button::
+	- text: claim.action.comment
+	- click: @ext.comment.click
+	- ink: info
+- Box::
+	- data-space-grabber
+- Button::
+	- text: page.common.button.save
+	- click: @ext.save.click
+	- fill: plain
+- Button::
+	- text: page.common.button.submit
+	- click: @ext.submit.click
