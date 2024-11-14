@@ -5,4 +5,4 @@ export * from './import-type';
 export * from './import-config';
 
 // instance
-export * from './imported-data';
+export * from './import-data';

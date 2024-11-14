@@ -22,7 +22,7 @@ import {ImportType} from './import-type';
  * 8. error could be occurred after ready and fixed, if inspection error found after that.
  * 9. abandon after streaming might be caused by timeout or other system issue to interrupt the streaming.
  */
-export enum ImportedDataIndexStatus {
+export enum ImportDataIndexStatus {
 	/** raw data import in progress */
 	IMPORTING = 'importing',
 	/** raw data imported, ready for next step */
@@ -39,7 +39,7 @@ export enum ImportedDataIndexStatus {
 	DONE = 'done',
 }
 
-export interface ImportedDataIndex extends Auditable, Tenanted {
+export interface ImportDataIndex extends Auditable, Tenanted {
 	/** sequence */
 	importId?: RdsId;
 	code?: string;
@@ -61,7 +61,7 @@ export interface ImportedDataIndex extends Auditable, Tenanted {
 	 */
 	lines?: number;
 	/** status of imported data, for whole data */
-	status?: ImportedDataIndexStatus;
+	status?: ImportDataIndexStatus;
 	/** raw data import start time */
 	importedAt?: DateTime;
 	/** raw data ready at, means no inspection error anymore */
@@ -121,7 +121,7 @@ export type ParsedDataChanges = Array<ParsedDataChange>;
  * 6. error could be occurred after ready and fixed, if inspection error found after that.
  * 7. abandon after streaming might be caused by timeout or other system issue to interrupt the streaming.
  */
-export enum ImportedDataLineStatus {
+export enum ImportDataLineStatus {
 	/** ready for next step */
 	READY = 'ready',
 	/** error found during inspection, waiting for fix */
@@ -136,10 +136,10 @@ export enum ImportedDataLineStatus {
 	DONE = 'done',
 }
 
-export interface ImportedDataLine extends Auditable, Tenanted {
+export interface ImportDataLine extends Auditable, Tenanted {
 	/** sequence */
 	lineId?: RdsId;
-	/** fk to {@link ImportedDataIndex} */
+	/** fk to {@link ImportDataIndex} */
 	importId?: RdsId;
 	/**
 	 * sometimes import data format has their natural index, partIndex just follows it.
@@ -170,7 +170,12 @@ export interface ImportedDataLine extends Auditable, Tenanted {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	raw?: any;
 	/** status of imported line */
-	status?: ImportedDataLineStatus;
+	status?: ImportDataLineStatus;
+	/**
+	 * error message or stack if status is error and error occurs on this line, not on field
+	 * e.g. error occurred on next action, and if there is error on multiple lines, error will be stored in first line only
+	 */
+	error?: string;
 	/** ready at, means no inspection error anymore */
 	readyAt?: DateTime;
 	/** abandoned at, could be abandoned by configuration + system, or manually */
