@@ -5,9 +5,10 @@
 	"type": "module",
 	"dependencies": {
 		"@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-		"@rainbow-d9/echarts": "1.2.21",
-		"@rainbow-d9/n2": "1.2.21",
-		"@rainbow-d9/n3": "1.2.21",
+		"@rainbow-d9/echarts": "1.2.23",
+		"@rainbow-d9/n2": "1.2.23",
+		"@rainbow-d9/n3": "1.2.23",
+		"@rainbow-n12/shared-model": "0.1.0",
 		"@rollup/pluginutils": "^5.1.0",
 		"@testing-library/jest-dom": "^5.17.0",
 		"@testing-library/react": "^13.4.0",
@@ -60,7 +61,7 @@
 	},
 	"volta": {
 		"node": "22.11.0",
-		"yarn": "1.22.21"
+		"yarn": "1.22.22"
 	},
 	"description": "NodeJS iBooking frontend, powered by @rainbow-d9, InsureMO."
 }

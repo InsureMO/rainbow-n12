@@ -1,0 +1,27 @@
+code: AskImportConfigList
+type: pipeline
+route: import/config/list
+method: post
+body: true
+authorizations: authenticated
+
+steps:
+  - name: Validate criteria
+    use: snippet
+    snippet: |-
+      interface AskImportConfigRequest {
+        type?: string;
+        pageSize?: number;
+        pageNumber?: number;
+      }
+      const {type, pageSize, pageNumber} = ($factor ?? {}) as AskImportConfigRequest
+      const criteria = {type};
+      {
+        const {test, value} = $.n12.isNumber(pageSize);
+        criteria.pageSize = test ? value : 20;
+      }
+      {
+        const {test, value} = $.n12.isNumber(pageNumber);
+        criteria.pageNumber = test ? value : 1;
+      }
+      return criteria;
