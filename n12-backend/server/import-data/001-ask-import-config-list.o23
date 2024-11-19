@@ -16,12 +16,7 @@ steps:
       }
       const {type, pageSize, pageNumber} = ($factor ?? {}) as AskImportConfigRequest
       const criteria = {type};
-      {
-        const {test, value} = $.n12.isNumber(pageSize);
-        criteria.pageSize = test ? value : 20;
-      }
-      {
-        const {test, value} = $.n12.isNumber(pageNumber);
-        criteria.pageNumber = test ? value : 1;
-      }
+      // max 100
+      criteria.pageSize = $.touch(pageSize).isInRange({min: 0, max: 100, interval: 'lo'}).toFixed0.toNumber.orUseDefault(20).value();
+      criteria.pageNumber = $.touch(pageNumber).isPositive.toFixed0.toNumber.orUseDefault(1).value();
       return criteria;
