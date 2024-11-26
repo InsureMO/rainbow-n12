@@ -45,7 +45,7 @@ Assume the following envs are ready, otherwise contact the tech guy.
 | VITE_MOCK_ENABLED                        | `false`               | Y        | Enable mock remote api.                                                                                                                                                                                                                                                                                       |
 
 > Please ensure that all set theme codes and language codes are supported by the application, as the application will not perform any
-> validation or error handling at runtime. Modify the `/src/utils/env-utils.ts` file to add your own validation.
+> validation or error handling at runtime. Modify the `/src/utils/env-index.ts` file to add your own validation.
 
 # Runtime
 
@@ -53,7 +53,7 @@ Assume the following envs are ready, otherwise contact the tech guy.
 
 The content stored in local storage is valid only for the current browser and is independent of the user.
 
-`d9-n99-` could be modified to any prefix you like, at `/src/utils/storage-utils.ts`.
+`d9-n99-` could be modified to any prefix you like, at `/src/utils/storage-index.ts`.
 
 | Name                    | Values                 | Description                                                     |
 |-------------------------|------------------------|-----------------------------------------------------------------|
@@ -62,13 +62,13 @@ The content stored in local storage is valid only for the current browser and is
 | `d9-n99-language`       | Language code          | Language code.                                                  |
 
 > Please ensure that all theme codes and language codes in storage are supported by the application, as the application will not perform any
-> validation or error handling at runtime. Modify the `/src/utils/storage-utils.ts` file to add your own validation.
+> validation or error handling at runtime. Modify the `/src/utils/storage-index.ts` file to add your own validation.
 
 ## Session storage
 
 The content stored in local storage is valid only for the current browser and current user.
 
-`d9-n99-` could be modified to any prefix you like, at `/src/utils/storage-utils.ts`.
+`d9-n99-` could be modified to any prefix you like, at `/src/utils/storage-index.ts`.
 
 | Name          | Values | Description                                        |
 |---------------|--------|----------------------------------------------------|
