@@ -1,10 +1,10 @@
-import {ImportType, Tenanted} from '@rainbow-n12/shared-model';
+import {ImportConfigType, Tenanted} from '@rainbow-n12/shared-model';
+import {TypeOrmBasis} from '@rainbow-o23/n3';
 import {APIPublisher, asT, buildFromInput, buildSnippet, Steps} from '../utils';
 import {ImportDataRoutes} from './routes';
-import {TypeOrmBasis} from '@rainbow-o23/n3';
 
 interface AskImportConfigRequest {
-	type?: ImportType;
+	type?: ImportConfigType;
 	pageSize?: number;
 	pageNumber?: number;
 }
@@ -12,7 +12,7 @@ interface AskImportConfigRequest {
 interface LoadCriteria extends TypeOrmBasis {
 	sql: string;
 	params: {
-		type?: ImportType;
+		type?: ImportConfigType;
 		offset: number;
 		size: number;
 	};
@@ -43,12 +43,14 @@ export const AskImportConfigList = () => {
 				.failure(() => '');
 
 			return {
-				sql: `SELECT CONFIG_ID AS "configId", CODE AS "code", NAME AS "name"
+				sql: `SELECT CONFIG_ID AS "configId", CODE AS "code", NAME AS "name", TYPE AS "type"
                       FROM T_IMPORT_CONFIG ${where}
                       ORDER BY CODE $.limit($offset, $size)`,
 				params: {tenantId, type, offset: (pageNumber - 1) * pageSize, size: pageSize}
 			};
-		})
+		}),
+		// use sql from input
+		sql: '@ignore'
 	});
 
 	return APIPublisher

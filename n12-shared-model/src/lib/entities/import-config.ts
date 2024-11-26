@@ -1,6 +1,6 @@
 import {PipelineCode, RdsId} from '../common';
 import {Auditable, ConfigChangeType, Tenanted} from './common';
-import {ImportType} from './import-type';
+import {ImportConfigType} from './import-type';
 
 export interface ImportDataPreservative {
 	code?: PipelineCode;
@@ -61,7 +61,7 @@ export interface ImportConfig extends Auditable, Tenanted {
 	code?: string;
 	name?: string;
 	description?: string;
-	type?: ImportType;
+	type?: ImportConfigType;
 	meta?: ImportConfigMeta;
 }
 

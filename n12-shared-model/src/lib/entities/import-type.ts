@@ -1,4 +1,4 @@
-export enum ImportType {
+export enum ImportConfigType {
 	API = 'api',
 	CSV = 'csv',
 	EDI = 'edi',

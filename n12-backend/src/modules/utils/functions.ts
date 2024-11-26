@@ -33,7 +33,7 @@ const useSnippet = (name: string, def: Omit<SnippetPipelineStepBuilderOptions, '
 	step.use = DefaultSteps.SNIPPET;
 	return asStep(step);
 };
-const useTypeOrmLoadBySQL = (name: string, def: Omit<TypeOrmBySQLPipelineStepBuilderOptions, 'name' | 'use' | 'step' | 'sql'> & Partial<Pick<TypeOrmBySQLPipelineStepBuilderOptions, 'sql'>>): Step<TypeOrmBySQLPipelineStepBuilderOptions> => {
+const useTypeOrmLoadBySQL = (name: string, def: Omit<TypeOrmBySQLPipelineStepBuilderOptions, 'name' | 'use' | 'step'>): Step<TypeOrmBySQLPipelineStepBuilderOptions> => {
 	const step = asT<Step<TypeOrmBySQLPipelineStepBuilderOptions>>(def);
 	step.name = name;
 	step.use = DefaultSteps.TYPEORM_LOAD_MANY_BY_SQL;

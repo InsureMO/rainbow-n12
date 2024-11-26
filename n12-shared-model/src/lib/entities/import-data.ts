@@ -1,6 +1,6 @@
 import {DateTime, RdsId, UserId} from '../common';
 import {Auditable, Tenanted} from './common';
-import {ImportType} from './import-type';
+import {ImportConfigType} from './import-type';
 
 /**
  * 1. index created and line still in progress: importing
@@ -44,7 +44,7 @@ export interface ImportDataIndex extends Auditable, Tenanted {
 	importId?: RdsId;
 	code?: string;
 	name?: string;
-	type?: ImportType;
+	type?: ImportConfigType;
 	/**
 	 * could be anything, just to log the source name if there is,
 	 * such as file name, s3 path, table name, etc.
