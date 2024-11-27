@@ -52,6 +52,14 @@ export interface ImportConfigMeta {
 	group?: ImportDataGrouper;
 	/** persist import data, for single line */
 	persist?: ImportDataPersister;
+	/**
+	 * data should be streamed to next step in bulk or not.
+	 * if not, once line is inspected with no error or error fixed, it will be streamed to next step.
+	 * typically, if lines are independent, use false to improve timeliness.
+	 * - for scenarios that require grouping multiple rows, use "true" to ensure that no lines are missed during the grouping operation due to any lines on error.
+	 * - for scenarios that lines depends on other lines, use "true" to ensure all lines are streamed on exactly importing order.
+	 */
+	bulkToNext?: boolean;
 }
 
 export interface ImportConfig extends Auditable, Tenanted {

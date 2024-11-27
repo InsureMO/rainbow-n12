@@ -1,8 +1,11 @@
 import {DateTime, TenantId, UserId} from '../common';
 
-export interface Auditable {
+export interface AuditCreation {
 	createdAt?: DateTime;
 	createdBy?: UserId;
+}
+
+export interface Auditable extends AuditCreation {
 	lastModifiedAt?: DateTime;
 	lastModifiedBy?: UserId;
 }

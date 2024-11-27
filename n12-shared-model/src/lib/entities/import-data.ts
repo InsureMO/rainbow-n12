@@ -1,43 +1,79 @@
 import {DateTime, RdsId, UserId} from '../common';
-import {Auditable, Tenanted} from './common';
+import {Auditable, AuditCreation, Tenanted} from './common';
 import {ImportConfigType} from './import-type';
 
 /**
- * 1. index created and line still in progress: importing
- * 2. all lines imported, but has inspection error: error
- * 3. all lines imported, with all inspection errors fixed: fixed
- * 4. no inspection error found: ready
- * 5. abandon by system, or manually: abandon
- * 6. start to stream to next step: streaming
- * 7. all lines available to next have been streamed to next step: done
- *
- * possible status flow:
- * 1. importing -> abandon: all data abandoned
- * 2. importing -> ready: all data ready for next step
- * 3. importing -> error: at least one line in error status
- * 4. importing -> error -> fixed: at least one line in error status, and all inspection errors fixed
- * 5. ready or error or fixed -> abandon: all data abandoned
- * 6. ready or fixed -> streaming -> done: lines not flagged as abandoned is streamed to next step.
- * 7. ready or fixed -> streaming -> abandon: partial data was streamed to next step, and the rest was abandoned.
- * 8. error could be occurred after ready and fixed, if inspection error found after that.
- * 9. abandon after streaming might be caused by timeout or other system issue to interrupt the streaming.
+ * - Index created, lines importing (might be 0 line imported), {@link IMPORTING}.
+ * - All lines imported, and no error detected or all errors fixed, {@link READY}.
+ * - All lines imported, but some lines have error, {@link PARTIAL_READY}. available for bulkToNext is false.
+ * - Error detected during inspection, {@link ERROR}. available for bulkToNext is true.
+ * - Error detected during inspection, but fixed, {@link FIXED}.
+ *   once status was switched to {@link STREAMING_WITH_ERROR}, even fixed, it will be switched back to {@link STREAMING} instead of {@link FIXED}.
+ * - Lines streaming to next step, {@link STREAMING}.
+ * - Lines streaming to next step, but some lines have error, {@link STREAMING_WITH_ERROR}. available for bulkToNext is false.
+ * - All lines abandoned, {@link ABANDON}.
+ * - All lines done, {@link DONE}. which means for a particular line, status is done or abandon.
  */
 export enum ImportDataIndexStatus {
 	/** raw data import in progress */
 	IMPORTING = 'importing',
 	/** raw data imported, ready for next step */
 	READY = 'ready',
-	/** error found during inspection, waiting for fix */
+	/**
+	 * raw data imported, partial ready for next step, which means at least one line is on error and waiting for fix
+	 * available only on bulkToNext is false.
+	 */
+	PARTIAL_READY = 'partial-ready',
+	/**
+	 * error found during inspection, waiting for fix
+	 * available only on bulkOnNext is true
+	 */
 	ERROR = 'error',
 	/** error found during inspection, but fixed */
 	FIXED = 'fixed',
-	/** whole raw data abandoned */
-	ABANDON = 'abandon',
 	/** raw data streaming to next step in progress */
 	STREAMING = 'streaming',
-	/** next step accomplished, all well done */
+	/**
+	 * raw data streaming to next step in progress, but at least one line is on error and waiting for fix
+	 * available only on bulkToNext is false.
+	 */
+	STREAMING_WITH_ERROR = 'streaming-with-error',
+	/** whole raw data abandoned. terminal status */
+	ABANDON = 'abandon',
+	/**
+	 * next step accomplished, all well done. terminal status.
+	 * done means all lines are streamed to next step, and no error found.
+	 * or some lines were abandoned, but the rest was streamed to next step.
+	 */
 	DONE = 'done',
 }
+
+/**
+ * block might be detected by the natual line format, which means the control lines are not mandatory.
+ * or in some cases, only control start line is designed, and block ends by next control start line detected,
+ * in this case, control end line is not mandatory.
+ *
+ * and start/end line numbers contains valid data lines and does not include control lines.
+ */
+export interface ImportDataBlockDetail {
+	/** starts from 0 */
+	index: number;
+	/** type of block */
+	type?: string;
+	startLineNumber?: number;
+	endLineNumber?: number;
+	controlStartLineNumber?: number;
+	controlEndLineNumber?: number;
+	/** all empty line numbers */
+	emptyLineNumbers?: Array<number>;
+	/**
+	 * when a block ending, there still might be some empty lines to EOF or next block,
+	 * in this case, the line numbers will be stored here.
+	 */
+	tailingEmptyLineNumbers?: Array<number>;
+}
+
+export type ImportDataBlockDetails = Array<ImportDataBlockDetail>;
 
 export interface ImportDataIndex extends Auditable, Tenanted {
 	/** sequence */
@@ -56,10 +92,19 @@ export interface ImportDataIndex extends Auditable, Tenanted {
 	 * or leave it empty when no return from import data preservative or preservative not declared.
 	 */
 	rawReference?: string;
-	/**
-	 * lines of imported data, if import type is for single entity, lines is 1.
-	 */
+	/** total lines of imported data, if import type is for single entity, lines is 1. */
 	lines?: number;
+	/**
+	 * total blocks of imported data, if import type is for single entity, blocks is 1.
+	 * for structured data, such as json, xml, etc., of course they can be split to blocks, but no block details will be saved.
+	 */
+	blocks?: number;
+	/** block index always starts from 0 */
+	blockDetails?: ImportDataBlockDetails;
+	/** total empty lines of imported data, if import type is for single entity, empty lines is 0. */
+	emptyLines?: number;
+	/** total control lines of imported data, if import type is for single entity, control lines is 0. */
+	controlLines?: number;
 	/** status of imported data, for whole data */
 	status?: ImportDataIndexStatus;
 	/** raw data import start time */
@@ -76,6 +121,16 @@ export interface ImportDataIndex extends Auditable, Tenanted {
 	doneAt?: DateTime;
 }
 
+/**
+ * one-2-one to {@link ImportDataIndex}.
+ * could be none, if the raw data is preserved to other place, such as S3, FTP, etc.
+ */
+export interface ImportedDataRaw {
+	/** pk, and fk to {@link ImportDataIndex} */
+	importId?: RdsId;
+	raw?: Blob;
+}
+
 export type ParsedDataPropertyName = string;
 export type BaseParsedValue = string | number | boolean | null | undefined;
 /**
@@ -90,10 +145,8 @@ export type ParsedValue =
 export type ParsedData = Record<ParsedDataPropertyName, ParsedValue>;
 
 export interface ParsedDataChange {
-	changedAt?: DateTime;
-	changedBy?: UserId;
 	/**
-	 * from and to need to appear in pairs, unless the value of one side is `null` or `undefined`, or one side is an empty string.
+	 * from and to need to appear in pairs, unless the value of one side is `null` or `undefined`.
 	 */
 	[key: `from-${ParsedDataPropertyName}` | `to-${ParsedDataPropertyName}`]: ParsedValue;
 	/**
@@ -102,24 +155,15 @@ export interface ParsedDataChange {
 	[key: `fix-${ParsedDataPropertyName}`]: string;
 }
 
-export type ParsedDataChanges = Array<ParsedDataChange>;
-
 /**
- * 1. ready for next step: ready
- * 2. error found during inspection: error
- * 3. error found during inspection, but fixed: fixed, equals to ready
- * 4. abandoned: abandon
- * 5. streaming to next step in progress: streaming
- * 6. next step accomplished: done
- *
- * possible status flow:
- * 1. ready -> abandon: line abandoned
- * 2. ready -> streaming -> done: line streamed to next step.
- * 3. error -> fixed -> abandon: line abandoned
- * 4. error -> fixed -> streaming -> done: line streamed to next step.
- * 5. error -> abandon: line abandoned
- * 6. error could be occurred after ready and fixed, if inspection error found after that.
- * 7. abandon after streaming might be caused by timeout or other system issue to interrupt the streaming.
+ * - Ready for next step, {@link READY}.
+ * - Error found during inspection, waiting for fix, {@link ERROR}.
+ * - Error found during inspection, but fixed, {@link FIXED}.
+ * - Abandoned, {@link ABANDON}.
+ * - Streaming to next step in progress, {@link STREAMING}.
+ *   if error occurred during streaming, status will be {@link STREAMING_WITH_ERROR}, and waiting for fix.
+ *   streaming error will write the error into line.
+ * - Next step accomplished, {@link DONE}.
  */
 export enum ImportDataLineStatus {
 	/** ready for next step */
@@ -132,6 +176,8 @@ export enum ImportDataLineStatus {
 	ABANDON = 'abandon',
 	/** streaming to next step in progress */
 	STREAMING = 'streaming',
+	/** error occurred during streaming */
+	STREAMING_WITH_ERROR = 'streaming-with-error',
 	/** next step accomplished */
 	DONE = 'done',
 }
@@ -151,21 +197,23 @@ export interface ImportDataLine extends Auditable, Tenanted {
 	 * e.g. starts from 0 if given data is an array, or starts from 1 if given data is a csv which with no header line.
 	 */
 	lineNumber?: number;
+	/** block index, starts from 0 */
+	blockIndex?: number;
+	/** block type, same as {@link ImportDataBlockDetail#type} which has same block index */
+	blockType?: string;
 	/**
 	 * parsed data, any type is ok, just to store the parsed data.
 	 */
 	parsed?: ParsedData;
 	/**
-	 * group key for lines, make sure all lines which need to be grouped have the same group key.
+	 * group keys for lines, make sure all lines which need to be grouped have the same group keys.
 	 * used in merge step and take effective in one import transaction.
 	 */
-	groupKey?: string;
-	/** any changes on this line */
-	changes?: ParsedDataChanges;
+	groupKeys?: string;
 	/**
 	 * raw data, any type is ok, just to store the raw data.
-	 * e.g. from csv, raw is a string. from json, raw might be a json object. from xlsx, raw might be an in-memory object.
-	 * but it will be stored as a json object anyway.
+	 * e.g. from csv, raw is a string. from json, raw might be a json object.
+	 * from xlsx, raw might be an in-memory object, but it will be stored as a json object anyway.
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	raw?: any;
@@ -184,6 +232,17 @@ export interface ImportDataLine extends Auditable, Tenanted {
 	abandonedBy?: UserId;
 	/** streaming starts at, means data is proceeding to next step */
 	streamingAt?: DateTime;
+	/** streaming error occurred at */
+	streamingErrorAt?: DateTime;
 	/** done at, means data was proceeded by next step */
 	doneAt?: DateTime;
+}
+
+export interface ImportDataLineChanges extends AuditCreation {
+	/** sequence */
+	changeId?: RdsId;
+	/** fk to {@link ImportDataLine} */
+	lineId?: RdsId;
+	/** any changes on this line */
+	changes?: ParsedDataChange;
 }
