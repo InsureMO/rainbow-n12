@@ -72,4 +72,3 @@ export interface ImportConfigLog extends ImportConfig {
 	logId?: RdsId;
 	changeType?: ConfigChangeType;
 }
-
