@@ -17,7 +17,7 @@
 	"license": "UNLICENSED",
 	"dependencies": {
 		"@rainbow-n12/shared-model": "0.1.0",
-		"@rainbow-o23/n90": "1.0.50",
+		"@rainbow-o23/n90": "1.0.51",
 		"pg": "^8.13.1",
 		"pg-query-stream": "^4.7.1"
 	},

@@ -35,12 +35,16 @@ export const AskImportConfigList = () => {
 		fromInput: buildFromInput<AskImportConfigRequest, LoadCriteria>(async ($factor, request, $) => {
 			const {type, pageSize, pageNumber} = $factor;
 			const tenantId = asT<Tenanted>(request.$context?.authorization)?.tenantId;
-			const tenantFilter = $.touch(tenantId).isBlank().ok() ? '' : 'TENANT_ID = $tenantId';
-			const typeFilter = $.touch(type).isBlank().ok() ? '' : 'TYPE = $type';
-			const where = $.touch([tenantFilter, typeFilter].filter(Boolean).join(' AND '))
-				.isNotBlank()
-				.success((filters: string) => `WHERE ${filters}`)
-				.failure(() => '');
+			const tenantFilter = $.touch(tenantId)
+				.isNotBlank().replaceWith(() => 'TENANT_ID = $tenantId')
+				.orUseDefault('').value<string>();
+			const typeFilter = $.touch(type)
+				.isNotBlank().replaceWith(() => 'TYPE = $type')
+				.orUseDefault('').value<string>();
+			const where = $.touch([tenantFilter, typeFilter])
+				.replaceWith((filters: string[]) => filters.filter(Boolean).join(' AND '))
+				.isNotBlank().replaceWith((filters: string) => `WHERE ${filters}`)
+				.value<string>();
 
 			return {
 				sql: `SELECT CONFIG_ID AS "configId", CODE AS "code", NAME AS "name", TYPE AS "type"

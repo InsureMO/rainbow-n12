@@ -1791,27 +1791,36 @@
     remark-gfm "^4.0.0"
     remark-parse "^11.0.0"
 
-"@rainbow-o23/n1@1.0.50":
-  version "1.0.50"
-  resolved "https://registry.yarnpkg.com/@rainbow-o23/n1/-/n1-1.0.50.tgz#ca1b5106aecb49237a622e18e5a7bf788e59ab72"
-  integrity sha512-aXPdsriQIagKsZjZgvfa7PkWlEenyhZlgAr6l2MX3pJpmDRGB73Mxey2KbViGVy0QCth+tvwYGyvrGicAvM0ug==
+"@rainbow-n19/n1@latest":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@rainbow-n19/n1/-/n1-0.1.1.tgz#5d1cceb553a91662a6d4b47cd93414d41e935008"
+  integrity sha512-5s+AU1Xip2Buh+LHOOlXVz1vRJ5RhQmrZGEXgID7HqHMON5y1b+5TCa1r5fvFF1OP0+PR2rF5ggVUa86xpmk2A==
   dependencies:
+    dayjs "^1.11.13"
+    decimal.js "^10.4.3"
+
+"@rainbow-o23/n1@1.0.51":
+  version "1.0.51"
+  resolved "https://registry.yarnpkg.com/@rainbow-o23/n1/-/n1-1.0.51.tgz#9bc59c66c8b5eabc8ef1f3e1e852c8e077655cb1"
+  integrity sha512-qUOkPoaB/eNCFesyDaDLsYZtCFVikl4LEhDeG61QW9HdYwwbzaC6vuEhVaK+OEHcWA+K0xmE/BpoqE8ULqO0VA==
+  dependencies:
+    "@rainbow-n19/n1" latest
     dayjs "^1.11.13"
     decimal.js "^10.4.3"
     mathjs "^13.2.1"
     nanoid "3.3.7"
 
-"@rainbow-o23/n2@1.0.50":
-  version "1.0.50"
-  resolved "https://registry.yarnpkg.com/@rainbow-o23/n2/-/n2-1.0.50.tgz#a0a645d5f65733662265863aeba22ea538ede671"
-  integrity sha512-aKHlaM+h5poXAzKgx0faFv94+BzO9VFZ8qDWjEwRYO1nyEBpc52GptzHaqfNh9UORkFVFgWuGA0Uz6CQuFBDYQ==
+"@rainbow-o23/n2@1.0.51":
+  version "1.0.51"
+  resolved "https://registry.yarnpkg.com/@rainbow-o23/n2/-/n2-1.0.51.tgz#31846318db18c5443c846eb179c95a029b4a8398"
+  integrity sha512-PsEmY8pCffTE+mLPlkUpQsaRfkU/Y4STqrjICiHv9hKp3rTYSmGo1VCUJyaFLU5Nhz3sVVgKiP8RLgNkI4Dgvw==
   dependencies:
     "@nestjs/common" "^10.4.7"
     "@nestjs/core" "^10.4.7"
     "@nestjs/platform-express" "^10.4.7"
     "@nestjs/platform-socket.io" "^10.4.7"
     "@nestjs/websockets" "^10.4.7"
-    "@rainbow-o23/n1" "1.0.50"
+    "@rainbow-o23/n1" "1.0.51"
     cron "^3.1.9"
     dayjs "^1.11.13"
     nest-winston "^1.9.7"
@@ -1820,32 +1829,32 @@
     winston "^3.16.0"
     winston-daily-rotate-file "^5.0.0"
 
-"@rainbow-o23/n3@1.0.50":
-  version "1.0.50"
-  resolved "https://registry.yarnpkg.com/@rainbow-o23/n3/-/n3-1.0.50.tgz#1dbb20f71a0af813b324f2a614f9c5fefc3a66a7"
-  integrity sha512-jG1ElK/779zK8pk95hrm4Hpg7ueOZbVc6k8pE6fKLmaXhs3oGR2mzmehi5FIDMeU9LqphzH5GIG9H6iOoDGLvg==
+"@rainbow-o23/n3@1.0.51":
+  version "1.0.51"
+  resolved "https://registry.yarnpkg.com/@rainbow-o23/n3/-/n3-1.0.51.tgz#016c71865f4860fad25cd635c5a9510870ed2bc4"
+  integrity sha512-X2uNJhNG0fNe5eap+V2T2Mzg6nDa+RFSL/M1HEcTDfB2+DRhS26uM/kOny0icIFCxTjccjkTFqStwD48AzRobw==
   dependencies:
-    "@rainbow-o23/n1" "1.0.50"
+    "@rainbow-o23/n1" "1.0.51"
     node-fetch "2.6.7"
     typeorm "^0.3.20"
     typescript "5.5.4"
 
-"@rainbow-o23/n4@1.0.50":
-  version "1.0.50"
-  resolved "https://registry.yarnpkg.com/@rainbow-o23/n4/-/n4-1.0.50.tgz#e71f6c410f2f27b5701f499c14a811476aa29766"
-  integrity sha512-7CrSkRbd5O2QAa8TS9fzY9oF0Nlrdb00+Wzj1gGL4eaDPpzfDWY2iWeVpItd+v4EKqKfGwAcmTSS3wMFncv98w==
+"@rainbow-o23/n4@1.0.51":
+  version "1.0.51"
+  resolved "https://registry.yarnpkg.com/@rainbow-o23/n4/-/n4-1.0.51.tgz#c008b35befb25891a7928d3e2c117502ac7454a7"
+  integrity sha512-gEO6rGWtvswKuaEOE4D0beiSMfN2AULDZqDz7i5EYKrxhjP0yzF/pZKmksVZ2bzeRmw02PjHGyqHsfoZ6P5N/A==
   dependencies:
-    "@rainbow-o23/n3" "1.0.50"
+    "@rainbow-o23/n3" "1.0.51"
     js-yaml "^4.1.0"
 
-"@rainbow-o23/n90@1.0.50":
-  version "1.0.50"
-  resolved "https://registry.yarnpkg.com/@rainbow-o23/n90/-/n90-1.0.50.tgz#8cb01418eba3684f49b908ba04cf0c6b19aeac6a"
-  integrity sha512-27+Tv3QVqHapvbCp1zDs+W1r3VGEkACZWEyNc8g8OUzVsJmPhyl6kdgL1qI4cnvvj68061dRx1mreTe0SxJOsQ==
+"@rainbow-o23/n90@1.0.51":
+  version "1.0.51"
+  resolved "https://registry.yarnpkg.com/@rainbow-o23/n90/-/n90-1.0.51.tgz#45d261562352d340b9f3417081d08fc886ca3c79"
+  integrity sha512-F+eyBpCqAV3xejSmfIi8j0loZQNid+gB6Z2P1s2O3woWBTGEKiyd2RD9CI47jg9tjFcDilWnKjrDe5iP1KspMw==
   dependencies:
-    "@rainbow-o23/n2" "1.0.50"
-    "@rainbow-o23/n3" "1.0.50"
-    "@rainbow-o23/n4" "1.0.50"
+    "@rainbow-o23/n2" "1.0.51"
+    "@rainbow-o23/n3" "1.0.51"
+    "@rainbow-o23/n4" "1.0.51"
     dotenv "^16.4.5"
     glob "^11.0.0"
 
