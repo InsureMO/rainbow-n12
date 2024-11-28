@@ -1,14 +1,14 @@
-import {DateTime, RdsId, UserId} from '../common';
-import {Auditable, AuditCreation, Tenanted} from './common';
+import {DateTime, RdsId, UserId} from '../../common';
+import {Auditable, AuditCreation, Tenanted} from '../common';
 import {ImportConfigType} from './import-type';
 
 /**
  * - Index created, lines importing (might be 0 line imported), {@link IMPORTING}.
  * - All lines imported, and no error detected or all errors fixed, {@link READY}.
  * - All lines imported, but some lines have error, {@link PARTIAL_READY}. available for bulkToNext is false.
- * - Error detected during inspection, {@link ERROR}. available for bulkToNext is true.
- * - Error detected during inspection, but fixed, {@link FIXED}.
- *   once status was switched to {@link STREAMING_WITH_ERROR}, even fixed, it will be switched back to {@link STREAMING} instead of {@link FIXED}.
+ * - Error detected during inspection, {@link INSPECT_ERROR}. available for bulkToNext is true.
+ * - Error detected during inspection, but fixed, {@link INSPECT_FIXED}.
+ *   once status was switched to {@link STREAMING_WITH_ERROR}, even fixed, it will be switched back to {@link STREAMING} instead of {@link INSPECT_FIXED}.
  * - Lines streaming to next step, {@link STREAMING}.
  * - Lines streaming to next step, but some lines have error, {@link STREAMING_WITH_ERROR}. available for bulkToNext is false.
  * - All lines abandoned, {@link ABANDON}.
@@ -28,9 +28,9 @@ export enum ImportDataIndexStatus {
 	 * error found during inspection, waiting for fix
 	 * available only on bulkOnNext is true
 	 */
-	ERROR = 'error',
+	INSPECT_ERROR = 'inspect-error',
 	/** error found during inspection, but fixed */
-	FIXED = 'fixed',
+	INSPECT_FIXED = 'inspect-fixed',
 	/** raw data streaming to next step in progress */
 	STREAMING = 'streaming',
 	/**
@@ -132,7 +132,7 @@ export interface ImportedDataRaw {
 }
 
 export type ParsedDataPropertyName = string;
-export type BaseParsedValue = string | number | boolean | null | undefined;
+export type BaseParsedValue = string | DateTime | number | boolean | null | undefined;
 /**
  * $err is reserved key for inspection error found
  */
@@ -157,8 +157,8 @@ export interface ParsedDataChange {
 
 /**
  * - Ready for next step, {@link READY}.
- * - Error found during inspection, waiting for fix, {@link ERROR}.
- * - Error found during inspection, but fixed, {@link FIXED}.
+ * - Error found during inspection, waiting for fix, {@link INSPECT_ERROR}.
+ * - Error found during inspection, but fixed, {@link INSPECT_FIXED}.
  * - Abandoned, {@link ABANDON}.
  * - Streaming to next step in progress, {@link STREAMING}.
  *   if error occurred during streaming, status will be {@link STREAMING_WITH_ERROR}, and waiting for fix.
@@ -169,9 +169,9 @@ export enum ImportDataLineStatus {
 	/** ready for next step */
 	READY = 'ready',
 	/** error found during inspection, waiting for fix */
-	ERROR = 'error',
+	INSPECT_ERROR = 'inspect-error',
 	/** error found during inspection, but fixed */
-	FIXED = 'fixed',
+	INSPECT_FIXED = 'inspect-fixed',
 	/** abandoned */
 	ABANDON = 'abandon',
 	/** streaming to next step in progress */
@@ -221,7 +221,7 @@ export interface ImportDataLine extends Auditable, Tenanted {
 	status?: ImportDataLineStatus;
 	/**
 	 * error message or stack if status is error and error occurs on this line, not on field
-	 * e.g. error occurred on next action, and if there is error on multiple lines, error will be stored in first line only
+	 * e.g. error occurred on next action, and if there is error on multiple lines, same error will be stored on each line
 	 */
 	error?: string;
 	/** ready at, means no inspection error anymore */

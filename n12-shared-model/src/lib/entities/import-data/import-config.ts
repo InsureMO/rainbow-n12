@@ -1,5 +1,5 @@
-import {PipelineCode, RdsId} from '../common';
-import {Auditable, ConfigChangeType, Tenanted} from './common';
+import {PipelineCode, RdsId} from '../../common';
+import {Auditable, ConfigChangeType, Tenanted} from '../common';
 import {ImportConfigType} from './import-type';
 
 export interface ImportDataPreservative {
