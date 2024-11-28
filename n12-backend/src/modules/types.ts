@@ -1,12 +1,22 @@
 import {ScriptFuncOrBody, TypeOrmSql} from '@rainbow-o23/n3';
-import {DefEnablement, ExposedPipelineDef, PipelineStepBuilderOptions, PipelineStepDef} from '@rainbow-o23/n4';
+import {
+	DefEnablement,
+	ExposedPipelineDef,
+	PipelineDef,
+	PipelineStepBuilderOptions,
+	PipelineStepDef
+} from '@rainbow-o23/n4';
 
 export interface DefMeta {
 	name: string;
 	code: string;
 }
 
-export interface APIDefMeta extends DefMeta {
+export interface ServiceApiMeta extends DefMeta {
+	type: 'pipeline';
+}
+
+export interface RestApiMeta extends DefMeta {
 	type: 'pipeline';
 	route: string;
 	method: ExposedPipelineDef['method'];
@@ -14,6 +24,7 @@ export interface APIDefMeta extends DefMeta {
 }
 
 export type RestAPI = ExposedPipelineDef & DefEnablement;
+export type ServiceAPI = PipelineDef & DefEnablement;
 
 // steps
 type PickNotFuncBody<T> = {

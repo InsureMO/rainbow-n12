@@ -7,8 +7,8 @@ import {
 	TenantId
 } from '@rainbow-n12/shared-model';
 import {TypeOrmPageable, TypeOrmQueryCriteria, TypeOrmWithSQL} from '../types';
-import {APIPublisher, asT, buildFromInput, pageToTypeOrm, Steps} from '../utils';
-import {ImportDataRoutes} from './routes';
+import {RestApiPublisher, asT, buildFromInput, pageToTypeOrm, Steps} from '../utils';
+import {ImportDataConstants} from './constants';
 
 interface AskImportConfigRequest extends PageableRequest {
 	type?: ImportConfigType;
@@ -27,7 +27,7 @@ interface Criteria extends TypeOrmPageable {
 type QueryBasis = TypeOrmWithSQL<TypeOrmQueryCriteria<Criteria>>;
 
 export const AskImportConfigList = () => {
-	const LoadConfigList = Steps.useLoadBySQL('Load import config list', {
+	const LoadConfigList = Steps.loadBySQL('Load import config list', {
 		fromInput: buildFromInput<AskImportConfigRequest, QueryBasis>(async ($factor, request, $) => {
 			const {type, pageSize, pageNumber} = $factor ?? {};
 			const tenantId = asT<Tenanted>(request.$context?.authorization)?.tenantId;
@@ -47,7 +47,7 @@ export const AskImportConfigList = () => {
                              CODE      AS "code",
                              NAME      AS "name",
                              TYPE      AS "type",
-                             ENABLED   AS "enabled"
+                             ENABLED   AS "enabled.@bool"
                       FROM T_IMPORT_CONFIG ${where}
                       ORDER BY NAME $.limit($offset, $size)`,
 				params: {tenantId, type, ...pageToTypeOrm({pageSize, pageNumber})}
@@ -57,8 +57,8 @@ export const AskImportConfigList = () => {
 		sql: '@ignore'
 	});
 
-	return APIPublisher
-		.use(ImportDataRoutes.AskImportConfigList)
+	return RestApiPublisher
+		.use(ImportDataConstants.AskImportConfigList)
 		.authenticated()
 		.enable()
 		.steps(LoadConfigList)

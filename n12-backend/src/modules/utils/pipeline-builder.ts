@@ -1,5 +1,5 @@
 import {PipelineStepDef} from '@rainbow-o23/n4';
-import {APIDefMeta, RestAPI} from '../types';
+import {RestApiMeta, DefMeta, RestAPI, ServiceAPI} from '../types';
 import {asT} from './functions';
 
 type IngMeta = Partial<RestAPI>;
@@ -7,23 +7,42 @@ type IngMeta = Partial<RestAPI>;
 abstract class IngMetaBuilder {
 	public constructor(protected readonly meta: IngMeta) {
 	}
+}
 
-	protected createEnablementBuilder(): EnablementBuilder {
-		return new EnablementBuilder(this.meta);
+abstract class AbstractEnablementBuilder<NextBuilder> extends IngMetaBuilder {
+	protected abstract createRequestAndResponseBuilder(): NextBuilder;
+
+	enable(): NextBuilder {
+		this.meta.enabled = true;
+		return this.createRequestAndResponseBuilder();
 	}
 
-	protected createRequestAndResponseBuilder(): RequestAndResponseBuilder {
-		return new RequestAndResponseBuilder(this.meta);
+	disable(): NextBuilder {
+		this.meta.enabled = false;
+		return this.createRequestAndResponseBuilder();
 	}
 }
 
-class AuthenticationBuilder extends IngMetaBuilder {
-	protected addAuthentication(func: () => void): EnablementBuilder {
-		func();
-		return this.createEnablementBuilder();
+abstract class AbstractStepsBuilder<Publisher> extends IngMetaBuilder {
+	protected abstract createPublisher(): Publisher;
+
+	steps(step: PipelineStepDef, ...moreSteps: Array<PipelineStepDef>): Publisher {
+		this.meta.steps = [step, ...moreSteps];
+		return this.createPublisher();
+	}
+}
+
+class RestApiAuthenticationBuilder extends IngMetaBuilder {
+	private createApiEnablementBuilder(): RestApiEnablementBuilder {
+		return new RestApiEnablementBuilder(this.meta);
 	}
 
-	permitAll(): EnablementBuilder {
+	private addAuthentication(func: () => void): RestApiEnablementBuilder {
+		func();
+		return this.createApiEnablementBuilder();
+	}
+
+	permitAll(): RestApiEnablementBuilder {
 		return this.addAuthentication(() => delete this.meta.authorizations);
 	}
 
@@ -40,42 +59,35 @@ class AuthenticationBuilder extends IngMetaBuilder {
 	}
 }
 
-class EnablementBuilder extends IngMetaBuilder {
-	enable(): RequestAndResponseBuilder {
-		this.meta.enabled = true;
-		return this.createRequestAndResponseBuilder();
-	}
-
-	disable(): RequestAndResponseBuilder {
-		this.meta.enabled = false;
-		return this.createRequestAndResponseBuilder();
+class RestApiEnablementBuilder extends AbstractEnablementBuilder<RestApiRequestAndResponseBuilder> {
+	protected createRequestAndResponseBuilder(): RestApiRequestAndResponseBuilder {
+		return new RestApiRequestAndResponseBuilder(this.meta);
 	}
 }
 
-class StepsBuilder extends IngMetaBuilder {
-	steps(step: PipelineStepDef, ...moreSteps: Array<PipelineStepDef>): RestAPIPublisher {
-		this.meta.steps = [step, ...moreSteps];
-		return new RestAPIPublisher(this.meta);
+class RestApiStepsBuilder extends AbstractStepsBuilder<RestApiBuildClosure> {
+	protected createPublisher(): RestApiBuildClosure {
+		return new RestApiBuildClosure(this.meta);
 	}
 }
 
-class RequestAndResponseBuilder extends StepsBuilder {
+class RestApiRequestAndResponseBuilder extends RestApiStepsBuilder {
 	/** after define request, response should be defined */
-	request(): RequestBuilder {
-		return new RequestBuilder(this.meta);
+	request(): RestApiRequestBuilder {
+		return new RestApiRequestBuilder(this.meta);
 	}
 
 	/** after define response, steps should be defined */
-	response(): Omit<RequestAndResponseBuilder, 'request' | 'response'> {
-		return new ResponseBuilder(this.meta);
+	response(): Omit<RestApiRequestAndResponseBuilder, 'request' | 'response'> {
+		return new RestApiResponseBuilder(this.meta);
 	}
 }
 
-class ResponseBuilder extends StepsBuilder {
-
+class RestApiResponseBuilder extends RestApiStepsBuilder {
+	// TODO build rest api response
 }
 
-class RequestBuilder extends ResponseBuilder {
+class RestApiRequestBuilder extends RestApiResponseBuilder {
 	headers(...headerNames: Array<string>): this {
 		if (headerNames == null || headerNames.length === 0) {
 			this.meta.headers = true;
@@ -116,19 +128,48 @@ class RequestBuilder extends ResponseBuilder {
 	}
 }
 
-class RestAPIPublisher extends IngMetaBuilder {
+class RestApiBuildClosure extends IngMetaBuilder {
 	publish(): RestAPI {
 		return asT<RestAPI>(this.meta);
 	}
 }
 
-export class APIPublisher {
+export class RestApiPublisher {
 	// noinspection JSUnusedLocalSymbols
 	private constructor() {
 		// avoid extend
 	}
 
-	public static use(meta: APIDefMeta): AuthenticationBuilder {
-		return new AuthenticationBuilder(meta);
+	public static use(meta: RestApiMeta): RestApiAuthenticationBuilder {
+		return new RestApiAuthenticationBuilder(meta);
+	}
+}
+
+class ServiceApiEnablementBuilder extends AbstractEnablementBuilder<ServiceApiApiStepsBuilder> {
+	protected createRequestAndResponseBuilder(): ServiceApiApiStepsBuilder {
+		return new ServiceApiApiStepsBuilder(this.meta);
+	}
+}
+
+class ServiceApiApiStepsBuilder extends AbstractStepsBuilder<ServiceApiBuildClosure> {
+	protected createPublisher(): ServiceApiBuildClosure {
+		return new ServiceApiBuildClosure(this.meta);
+	}
+}
+
+class ServiceApiBuildClosure extends IngMetaBuilder {
+	publish(): ServiceAPI {
+		return asT<ServiceAPI>(this.meta);
+	}
+}
+
+export class ServiceApiPublisher {
+	// noinspection JSUnusedLocalSymbols
+	private constructor() {
+		// avoid extend
+	}
+
+	public static use(meta: DefMeta): ServiceApiEnablementBuilder {
+		return new ServiceApiEnablementBuilder(meta);
 	}
 }

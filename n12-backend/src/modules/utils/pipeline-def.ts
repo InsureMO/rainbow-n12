@@ -7,11 +7,14 @@ import {
 	SnippetPipelineStepBuilderOptions,
 	TypeOrmBySQLPipelineStepBuilderOptions
 } from '@rainbow-o23/n4';
-import {APIDefMeta, Step} from '../types';
+import {RestApiMeta, ServiceApiMeta, Step} from '../types';
 import {asT} from './functions';
 
-export const apiDefMeta = (code: string, route: string, method: ExposedPipelineDef['method']): Readonly<APIDefMeta> => {
-	const def: APIDefMeta = {name: code, code, route, method, type: 'pipeline'};
+export const asServiceApi = (code: string): Readonly<ServiceApiMeta> => {
+	return {name: code, code, type: 'pipeline'};
+};
+export const asRestApi = (code: string, route: string, method: ExposedPipelineDef['method']): Readonly<RestApiMeta> => {
+	const def: RestApiMeta = {name: code, code, route, method, type: 'pipeline'};
 	if (method !== 'get') {
 		def.body = true;
 	}
@@ -37,7 +40,7 @@ const useTypeOrmLoadBySQL = (name: string, def: Omit<TypeOrmBySQLPipelineStepBui
 };
 export const Steps = {
 	snippet: useSnippet,
-	useLoadBySQL: useTypeOrmLoadBySQL
+	loadBySQL: useTypeOrmLoadBySQL
 };
 export const buildFromInput = <In extends any, InFragment extends any>(func: GetInFragmentFromRequestFunc<In, InFragment>): GetInFragmentFromRequestFunc<In, InFragment> => func;
 export const buildToOutput = <In extends any, Out extends any, OutFragment extends any>(func: SetOutFragmentToResponseFunc<In, Out, OutFragment>): SetOutFragmentToResponseFunc<In, Out, OutFragment> => func;
