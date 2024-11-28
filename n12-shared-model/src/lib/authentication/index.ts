@@ -4,6 +4,7 @@ export enum RoleRestrictionType {
 	SIMPLE = 'simple', COMPLEX = 'complex', AND = 'and', OR = 'or'
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface RoleRestriction<V = any> {
 	type: RoleRestrictionType;
 	value: V;
@@ -13,6 +14,7 @@ export interface SimpleRoleRestriction extends RoleRestriction<string | DateTime
 	type: RoleRestrictionType.SIMPLE;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface ComplexRoleRestriction<V = any> extends RoleRestriction<V> {
 	type: RoleRestrictionType.COMPLEX;
 }

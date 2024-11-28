@@ -1,22 +1,18 @@
-import {ImportConfigType, Tenanted} from '@rainbow-n12/shared-model';
-import {TypeOrmBasis} from '@rainbow-o23/n3';
+import {ImportConfigType, PageableRequest, Tenanted, TenantId} from '@rainbow-n12/shared-model';
+import {TypeOrmPageable, TypeOrmQueryCriteria, TypeOrmWithSQL} from '../types';
 import {APIPublisher, asT, buildFromInput, buildSnippet, Steps} from '../utils';
 import {ImportDataRoutes} from './routes';
 
-interface AskImportConfigRequest {
+interface AskImportConfigRequest extends PageableRequest {
 	type?: ImportConfigType;
-	pageSize?: number;
-	pageNumber?: number;
 }
 
-interface LoadCriteria extends TypeOrmBasis {
-	sql: string;
-	params: {
-		type?: ImportConfigType;
-		offset: number;
-		size: number;
-	};
+interface Criteria extends TypeOrmPageable {
+	tenantId?: TenantId;
+	type?: ImportConfigType;
 }
+
+type QueryBasis = TypeOrmWithSQL<TypeOrmQueryCriteria<Criteria>>;
 
 export const AskImportConfigList = () => {
 	const ValidateCriteria = Steps.snippet('Validate criteria', {
@@ -32,7 +28,7 @@ export const AskImportConfigList = () => {
 		})
 	});
 	const LoadConfigList = Steps.useLoadBySQL('Load import config list', {
-		fromInput: buildFromInput<AskImportConfigRequest, LoadCriteria>(async ($factor, request, $) => {
+		fromInput: buildFromInput<AskImportConfigRequest, QueryBasis>(async ($factor, request, $) => {
 			const {type, pageSize, pageNumber} = $factor;
 			const tenantId = asT<Tenanted>(request.$context?.authorization)?.tenantId;
 			const tenantFilter = $.touch(tenantId)
@@ -43,15 +39,15 @@ export const AskImportConfigList = () => {
 				.orUseDefault('').value<string>();
 			const where = $.touch([tenantFilter, typeFilter])
 				.replaceWith((filters: string[]) => filters.filter(Boolean).join(' AND '))
-				.isNotBlank().replaceWith((filters: string) => `WHERE ${filters}`)
+				.isNotBlank().prefix('WHERE ')
 				.value<string>();
 
 			return {
 				sql: `SELECT CONFIG_ID AS "configId", CODE AS "code", NAME AS "name", TYPE AS "type"
                       FROM T_IMPORT_CONFIG ${where}
-                      ORDER BY CODE $.limit($offset, $size)`,
+                      ORDER BY NAME $.limit($offset, $size)`,
 				params: {tenantId, type, offset: (pageNumber - 1) * pageSize, size: pageSize}
-			};
+			} as QueryBasis;
 		}),
 		// use sql from input
 		sql: '@ignore'
