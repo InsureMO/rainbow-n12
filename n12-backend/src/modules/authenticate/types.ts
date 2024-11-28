@@ -1,5 +1,5 @@
 import {Authentication} from '@rainbow-n12/shared-model';
-import {Config, Logger, PipelineOptions, PipelineRequestAuthorization} from '@rainbow-o23/n1';
+import {PipelineOptions, PipelineRequestAuthorization} from '@rainbow-o23/n1';
 import {Request} from 'express';
 
 export interface AuthorizationRequest {

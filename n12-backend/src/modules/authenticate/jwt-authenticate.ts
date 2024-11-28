@@ -5,7 +5,7 @@ import {Authorization, AuthorizationRequest} from './types';
 export const JwtAuthenticate = () => {
 	const Authorize = Steps.snippet('Authorize', {
 		snippet: buildSnippet<AuthorizationRequest, Authorization>(async ($factor) => {
-			// TODO
+			// TODO do jwt authenticate
 			return null;
 		})
 	});

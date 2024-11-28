@@ -7,7 +7,7 @@ import {
 	TenantId
 } from '@rainbow-n12/shared-model';
 import {TypeOrmPageable, TypeOrmQueryCriteria, TypeOrmWithSQL} from '../types';
-import {RestApiPublisher, asT, buildFromInput, pageToTypeOrm, Steps} from '../utils';
+import {asT, buildFromInput, pageToTypeOrm, RestApiPublisher, Steps} from '../utils';
 import {ImportDataConstants} from './constants';
 
 interface AskImportConfigRequest extends PageableRequest {
@@ -27,6 +27,12 @@ interface Criteria extends TypeOrmPageable {
 type QueryBasis = TypeOrmWithSQL<TypeOrmQueryCriteria<Criteria>>;
 
 export const AskImportConfigList = () => {
+	// 1. build base sql
+	// 2. start transaction, since two sql should be in same transaction
+	// 3. execute count sql to get item count
+	// 4. compute page number again
+	// 5. execute item sql to get items
+	// 6. build response by items and pageable
 	const LoadConfigList = Steps.loadBySQL('Load import config list', {
 		fromInput: buildFromInput<AskImportConfigRequest, QueryBasis>(async ($factor, request, $) => {
 			const {type, pageSize, pageNumber} = $factor ?? {};
