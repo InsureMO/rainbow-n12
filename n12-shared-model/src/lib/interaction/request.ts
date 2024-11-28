@@ -1,8 +1,9 @@
+import {Pageable} from './pageable';
+
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface InteractionRequest {
 }
 
-export interface PageableRequest extends InteractionRequest {
-	pageSize?: number;
-	pageNumber?: number;
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface PageableRequest extends InteractionRequest, Partial<Pageable> {
 }

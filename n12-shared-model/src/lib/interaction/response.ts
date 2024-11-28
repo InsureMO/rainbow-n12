@@ -1,3 +1,5 @@
+import {PageableData} from './pageable';
+
 export type ResponseSuccess = 'R-00000';
 export type ResponseError = 'R-99999';
 export type ResponseCode = ResponseSuccess | ResponseError;
@@ -17,4 +19,8 @@ export interface ErrorInteractionResponse<Details> extends InteractionResponse {
 	message?: string;
 	/** detail error information, could be anything, depends on api itself */
 	details?: Details;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface PageableResponse<Data> extends SuccessInteractionResponse<PageableData<Data>> {
 }

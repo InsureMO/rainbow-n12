@@ -68,6 +68,7 @@ export interface ImportConfig extends Auditable, Tenanted {
 	/** unique index */
 	code?: string;
 	name?: string;
+	enabled?: boolean;
 	description?: string;
 	type?: ImportConfigType;
 	meta?: ImportConfigMeta;

@@ -1,10 +1,22 @@
-import {ImportConfigType, PageableRequest, Tenanted, TenantId} from '@rainbow-n12/shared-model';
+import {
+	ImportConfig,
+	ImportConfigType,
+	PageableRequest,
+	PageableResponse,
+	Tenanted,
+	TenantId
+} from '@rainbow-n12/shared-model';
 import {TypeOrmPageable, TypeOrmQueryCriteria, TypeOrmWithSQL} from '../types';
-import {APIPublisher, asT, buildFromInput, buildSnippet, Steps} from '../utils';
+import {APIPublisher, asT, buildFromInput, pageToTypeOrm, Steps} from '../utils';
 import {ImportDataRoutes} from './routes';
 
 interface AskImportConfigRequest extends PageableRequest {
 	type?: ImportConfigType;
+}
+
+type ImportConfigItem = Pick<ImportConfig, 'configId' | 'code' | 'name' | 'type' | 'enabled'>;
+
+interface AskImportConfigResponse extends PageableResponse<ImportConfigItem> {
 }
 
 interface Criteria extends TypeOrmPageable {
@@ -15,21 +27,9 @@ interface Criteria extends TypeOrmPageable {
 type QueryBasis = TypeOrmWithSQL<TypeOrmQueryCriteria<Criteria>>;
 
 export const AskImportConfigList = () => {
-	const ValidateCriteria = Steps.snippet('Validate criteria', {
-		snippet: buildSnippet<AskImportConfigRequest, AskImportConfigRequest>(async ($factor, _, $) => {
-			const {type, pageSize, pageNumber} = $factor ?? {};
-			return {
-				type,
-				pageSize: $.touch(pageSize).isInRange({
-					min: 0, max: 100, interval: 'lo'
-				}).toFixed0.toNumber.orUseDefault(20).value<number>(),
-				pageNumber: $.touch(pageNumber).isPositive.toFixed0.toNumber.orUseDefault(1).value<number>()
-			};
-		})
-	});
 	const LoadConfigList = Steps.useLoadBySQL('Load import config list', {
 		fromInput: buildFromInput<AskImportConfigRequest, QueryBasis>(async ($factor, request, $) => {
-			const {type, pageSize, pageNumber} = $factor;
+			const {type, pageSize, pageNumber} = $factor ?? {};
 			const tenantId = asT<Tenanted>(request.$context?.authorization)?.tenantId;
 			const tenantFilter = $.touch(tenantId)
 				.isNotBlank().replaceWith(() => 'TENANT_ID = $tenantId')
@@ -43,10 +43,14 @@ export const AskImportConfigList = () => {
 				.value<string>();
 
 			return {
-				sql: `SELECT CONFIG_ID AS "configId", CODE AS "code", NAME AS "name", TYPE AS "type"
+				sql: `SELECT CONFIG_ID AS "configId",
+                             CODE      AS "code",
+                             NAME      AS "name",
+                             TYPE      AS "type",
+                             ENABLED   AS "enabled"
                       FROM T_IMPORT_CONFIG ${where}
                       ORDER BY NAME $.limit($offset, $size)`,
-				params: {tenantId, type, offset: (pageNumber - 1) * pageSize, size: pageSize}
+				params: {tenantId, type, ...pageToTypeOrm({pageSize, pageNumber})}
 			} as QueryBasis;
 		}),
 		// use sql from input
@@ -57,6 +61,6 @@ export const AskImportConfigList = () => {
 		.use(ImportDataRoutes.AskImportConfigList)
 		.authenticated()
 		.enable()
-		.steps(ValidateCriteria, LoadConfigList)
+		.steps(LoadConfigList)
 		.publish();
 };
