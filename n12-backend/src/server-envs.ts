@@ -27,11 +27,11 @@ class ConfigDelegate implements Pick<Config, 'getBoolean' | 'getNumber' | 'getSt
 	}
 
 	public get MAX_PAGE_SIZE() {
-		return this.getNumber('app.page.max.size', 100);
+		return this.getNumber(ServiceConfigConst.MaxPageSize, 100);
 	}
 
 	public get DEFAULT_PAGE_SIZE() {
-		return this.getNumber('app.page.default.size', 20);
+		return this.getNumber(ServiceConfigConst.DefaultPageSize, 20);
 	}
 
 	public get PAGE_SIZE_RANGE(): DecimalInRangeOptions {
@@ -39,4 +39,11 @@ class ConfigDelegate implements Pick<Config, 'getBoolean' | 'getNumber' | 'getSt
 	}
 }
 
+export const ServiceConfigConst = {
+	// pageable
+	MaxPageSize: 'app.page.max.size',
+	DefaultPageSize: 'app.page.default.size',
+	// authentication
+	AuthJwtEnabled: 'app.authentication.jwt.enabled'
+} as const;
 export const ServerConfig = new ConfigDelegate();

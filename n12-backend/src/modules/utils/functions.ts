@@ -7,6 +7,7 @@ import {TypeOrmPageable} from '../types';
 export const asT = <T>(value: any): T => value;
 /** assert given function to be of type F */
 export const asF = <F extends Function>(func: F): F => func;
+export const notNull = <T>(value: T | null | undefined): value is T => value != null;
 
 export const pageToTypeOrm = (page: Pageable): TypeOrmPageable => {
 	let {pageNumber, pageSize} = page ?? {};
