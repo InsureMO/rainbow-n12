@@ -16,7 +16,7 @@ export class JwtAuthenticationProvider implements AuthenticationProvider {
 			snippet: buildSnippet<MightBeAuthorized, Authorization>(async ($factor) => {
 				// TODO do jwt authenticate
 				const {request: {authorization} = {}} = $factor;
-				const token = ValueOperator.of(authorization).isNotBlank().value<string>();
+				const token = ValueOperator.of(authorization).isNotBlank().orUseDefault('').value<string>();
 				try {
 					const decoded = jwt.verify(token, ServerConfig.JWT_AUTH_SECURITY_KEY, {complete: false});
 					return {authorized: true, authentication: {userId: '-1'}, roles: []};
