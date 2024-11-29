@@ -27,23 +27,32 @@ class ConfigDelegate implements Pick<Config, 'getBoolean' | 'getNumber' | 'getSt
 	}
 
 	public get MAX_PAGE_SIZE() {
-		return this.getNumber(ServiceConfigConst.MaxPageSize, 100);
+		return this.getNumber(ServerConfigConst.MaxPageSize, 100);
 	}
 
 	public get DEFAULT_PAGE_SIZE() {
-		return this.getNumber(ServiceConfigConst.DefaultPageSize, 20);
+		return this.getNumber(ServerConfigConst.DefaultPageSize, 20);
 	}
 
 	public get PAGE_SIZE_RANGE(): DecimalInRangeOptions {
 		return {min: 0, max: ServerConfig.MAX_PAGE_SIZE, interval: 'lo'};
 	}
+
+	public get JWT_AUTH_ENABLED(): boolean {
+		return this.getBoolean(ServerConfigConst.AuthJwtEnabled, false);
+	}
+
+	public get JWT_AUTH_SECURITY_KEY(): string {
+		return this.getString(ServerConfigConst.AuthJwtSecurityKey, '');
+	}
 }
 
-export const ServiceConfigConst = {
+export const ServerConfigConst = {
 	// pageable
 	MaxPageSize: 'app.page.max.size',
 	DefaultPageSize: 'app.page.default.size',
-	// authentication
-	AuthJwtEnabled: 'app.authentication.jwt.enabled'
+	// authentication, jwt
+	AuthJwtEnabled: 'app.authentication.jwt.enabled',
+	AuthJwtSecurityKey: 'app.authentication.jwt.security.key'
 } as const;
 export const ServerConfig = new ConfigDelegate();

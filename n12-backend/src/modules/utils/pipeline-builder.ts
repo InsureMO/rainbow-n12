@@ -65,9 +65,9 @@ class RestApiEnablementBuilder extends AbstractEnablementBuilder<RestApiRequestA
 	}
 }
 
-class RestApiStepsBuilder extends AbstractStepsBuilder<RestApiBuildClosure> {
-	protected createPublisher(): RestApiBuildClosure {
-		return new RestApiBuildClosure(this.meta);
+class RestApiStepsBuilder extends AbstractStepsBuilder<RestApiBuilder> {
+	protected createPublisher(): RestApiBuilder {
+		return new RestApiBuilder(this.meta);
 	}
 }
 
@@ -128,7 +128,7 @@ class RestApiRequestBuilder extends RestApiResponseBuilder {
 	}
 }
 
-class RestApiBuildClosure extends IngMetaBuilder {
+class RestApiBuilder extends IngMetaBuilder {
 	publish(): RestAPI {
 		return asT<RestAPI>(this.meta);
 	}
@@ -151,13 +151,13 @@ class ServiceApiEnablementBuilder extends AbstractEnablementBuilder<ServiceApiAp
 	}
 }
 
-class ServiceApiApiStepsBuilder extends AbstractStepsBuilder<ServiceApiBuildClosure> {
-	protected createPublisher(): ServiceApiBuildClosure {
-		return new ServiceApiBuildClosure(this.meta);
+class ServiceApiApiStepsBuilder extends AbstractStepsBuilder<ServiceApiBuilder> {
+	protected createPublisher(): ServiceApiBuilder {
+		return new ServiceApiBuilder(this.meta);
 	}
 }
 
-class ServiceApiBuildClosure extends IngMetaBuilder {
+class ServiceApiBuilder extends IngMetaBuilder {
 	publish(): ServiceAPI {
 		return asT<ServiceAPI>(this.meta);
 	}

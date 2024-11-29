@@ -1,5 +1,6 @@
 import {Authentication} from '@rainbow-n12/shared-model';
-import {PipelineOptions, PipelineRequestAuthorization} from '@rainbow-o23/n1';
+import {Config, PipelineRequestAuthorization} from '@rainbow-o23/n1';
+import {PipelineStepDef, PipelineStepSetsDef} from '@rainbow-o23/n4';
 import {Request} from 'express';
 
 export interface AuthorizationRequest {
@@ -9,10 +10,13 @@ export interface AuthorizationRequest {
 
 export type Authorization = PipelineRequestAuthorization<Authentication>;
 
+export interface MightBeAuthorized {
+	request: AuthorizationRequest;
+	authorization: Authorization;
+}
+
 export interface AuthenticationProvider {
-	/**
-	 * never throw exception, just return yes or no
-	 * and carry authorization/authentication details if return yes
-	 */
-	authenticate(request: AuthorizationRequest, options: Pick<PipelineOptions, 'config' | 'logger'>): Promise<Authorization>;
+	readonly name: string;
+	should: (config: Config) => boolean;
+	createSteps(): Array<PipelineStepDef | PipelineStepSetsDef>;
 }
