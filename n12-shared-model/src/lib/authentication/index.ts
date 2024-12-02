@@ -1,33 +1,10 @@
-import {DateTime, TenantCode, TenantId, TenantName, UserId, UserName} from '../common';
+import {TenantCode, TenantId, TenantName, UserId, UserName} from '../common';
+import {AuthorizedPermissionRestrictions} from '../entities/authorization';
 
-export enum RoleRestrictionType {
-	SIMPLE = 'simple', COMPLEX = 'complex', AND = 'and', OR = 'or'
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface RoleRestriction<V = any> {
-	type: RoleRestrictionType;
-	value: V;
-}
-
-export interface SimpleRoleRestriction extends RoleRestriction<string | DateTime | number | boolean> {
-	type: RoleRestrictionType.SIMPLE;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface ComplexRoleRestriction<V = any> extends RoleRestriction<V> {
-	type: RoleRestrictionType.COMPLEX;
-}
-
-export interface JointRoleRestriction extends RoleRestriction<Array<RoleRestrictions>> {
-	type: RoleRestrictionType.AND | RoleRestrictionType.OR;
-}
-
-export type RoleRestrictions = SimpleRoleRestriction | ComplexRoleRestriction | JointRoleRestriction;
-
-export interface AuthorizedRole {
+export interface AuthorizedRolePermission {
+	/** permission code, actually */
 	code: string;
-	restrictions?: Record<string, RoleRestrictions>;
+	restrictions?: AuthorizedPermissionRestrictions;
 }
 
 export interface Authentication {
@@ -36,5 +13,5 @@ export interface Authentication {
 	tenantId?: TenantId;
 	tenantCode?: TenantCode;
 	tenantName?: TenantName;
-	roles?: Array<AuthorizedRole>;
+	roles?: Array<AuthorizedRolePermission>;
 }

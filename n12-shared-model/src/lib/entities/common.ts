@@ -10,6 +10,10 @@ export interface Auditable extends AuditCreation {
 	lastModifiedBy?: UserId;
 }
 
+export interface OptimisticLock {
+	version?: number;
+}
+
 export interface Tenanted {
 	tenantId?: TenantId;
 }

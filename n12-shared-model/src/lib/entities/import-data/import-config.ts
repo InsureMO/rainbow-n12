@@ -1,5 +1,5 @@
 import {PipelineCode, RdsId} from '../../common';
-import {Auditable, ConfigChangeType, Tenanted} from '../common';
+import {Auditable, ConfigChangeType, OptimisticLock, Tenanted} from '../common';
 import {ImportConfigType} from './import-type';
 
 export interface ImportDataPreservative {
@@ -62,7 +62,7 @@ export interface ImportConfigMeta {
 	bulkToNext?: boolean;
 }
 
-export interface ImportConfig extends Auditable, Tenanted {
+export interface ImportConfig extends Auditable, Tenanted, OptimisticLock {
 	/** sequence */
 	configId?: RdsId;
 	/** unique index */

@@ -1,5 +1,5 @@
 import {DateTime, RdsId, UserId} from '../../common';
-import {Auditable, AuditCreation, Tenanted} from '../common';
+import {Auditable, AuditCreation, OptimisticLock, Tenanted} from '../common';
 import {ImportConfigType} from './import-type';
 
 /**
@@ -75,7 +75,7 @@ export interface ImportDataBlockDetail {
 
 export type ImportDataBlockDetails = Array<ImportDataBlockDetail>;
 
-export interface ImportDataIndex extends Auditable, Tenanted {
+export interface ImportDataIndex extends Auditable, Tenanted, OptimisticLock {
 	/** sequence */
 	importId?: RdsId;
 	code?: string;
@@ -182,7 +182,7 @@ export enum ImportDataLineStatus {
 	DONE = 'done',
 }
 
-export interface ImportDataLine extends Auditable, Tenanted {
+export interface ImportDataLine extends Auditable, Tenanted, OptimisticLock {
 	/** sequence */
 	lineId?: RdsId;
 	/** fk to {@link ImportDataIndex} */
