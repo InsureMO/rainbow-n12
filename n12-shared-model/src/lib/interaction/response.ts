@@ -1,6 +1,9 @@
+import {ValidateItem} from '../validation';
 import {PageableData} from './pageable';
 
-export type ResponseSuccess = 'R-00000';
+export type ResponseOK = 'R-00000';
+export type ResponseValidationFailures = 'R-00001';
+export type ResponseSuccess = ResponseOK | ResponseValidationFailures;
 export type ResponseError = 'R-99999';
 export type ResponseCode = ResponseSuccess | ResponseError;
 
@@ -23,4 +26,9 @@ export interface ErrorInteractionResponse<Details> extends InteractionResponse {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface PageableResponse<Data> extends SuccessInteractionResponse<PageableData<Data>> {
+	code: ResponseOK;
+}
+
+export interface ValidationFailedResponse extends SuccessInteractionResponse<Array<ValidateItem>> {
+	code: ResponseValidationFailures;
 }

@@ -1,3 +1,5 @@
+import {ValidationFailedResponse} from '../interaction';
+
 export enum ValidateLevel {
 	ERROR = 'e', WARN = 'w', INFO = 'i'
 }
@@ -32,6 +34,7 @@ export interface IValidationResult {
 	warns(): Array<ValidateItem>;
 	attentions(): Array<ValidateItem>;
 	infos(): Array<ValidateItem>;
+	toResponse(): ValidationFailedResponse;
 }
 
 export class ValidationResult implements IValidationResult {
@@ -104,5 +107,9 @@ export class ValidationResult implements IValidationResult {
 
 	public infos(): Array<ValidateItem> {
 		return this.fragments.filter(({level}) => level === ValidateLevel.INFO);
+	}
+
+	public toResponse(): ValidationFailedResponse {
+		return {code: 'R-00001', data: this.all()};
 	}
 }

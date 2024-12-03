@@ -20,7 +20,7 @@ export enum TenantType {
 	 * tenant derived from other tenant
 	 * can visit its own data and its subordinates' data
 	 */
-	DERIVED_TENANT = 'derived',
+	DERIVED_TENANT = 'derived'
 }
 
 /**
