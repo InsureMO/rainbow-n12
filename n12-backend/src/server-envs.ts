@@ -45,6 +45,10 @@ class ConfigDelegate implements Pick<Config, 'getBoolean' | 'getNumber' | 'getSt
 	public get JWT_AUTH_SECURITY_KEY(): string {
 		return this.getString(ServerConfigConst.AuthJwtSecurityKey, '');
 	}
+
+	public get MULTIPLE_TENANT_ENABLED(): boolean {
+		return this.getBoolean(ServerConfigConst.MultipleTenantEnabled, false);
+	}
 }
 
 export const ServerConfigConst = {
@@ -53,6 +57,8 @@ export const ServerConfigConst = {
 	DefaultPageSize: 'app.page.default.size',
 	// authentication, jwt
 	AuthJwtEnabled: 'app.authentication.jwt.enabled',
-	AuthJwtSecurityKey: 'app.authentication.jwt.security.key'
+	AuthJwtSecurityKey: 'app.authentication.jwt.security.key',
+	// tenant, organization related
+	MultipleTenantEnabled: 'app.tenant.multiple.enabled'
 } as const;
 export const ServerConfig = new ConfigDelegate();

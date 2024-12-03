@@ -1,29 +1,26 @@
 import {PipelineStepDef} from '@rainbow-o23/n4';
-import {RestApiMeta, DefMeta, RestAPI, ServiceAPI} from '../types';
+import {DefMeta, RestAPI, RestApiMeta, ServiceAPI} from '../types';
 import {asT} from './functions';
 
-type IngMeta = Partial<RestAPI>;
+type RestApiIngMeta = Partial<RestAPI>;
+type ServiceApiIngMeta = Partial<ServiceAPI>;
+type IngMeta = RestApiIngMeta | ServiceApiIngMeta;
 
-abstract class IngMetaBuilder {
-	public constructor(protected readonly meta: IngMeta) {
+abstract class IngMetaBuilder<Meta extends IngMeta> {
+	public constructor(protected readonly meta: Meta) {
 	}
 }
 
-abstract class AbstractEnablementBuilder<NextBuilder> extends IngMetaBuilder {
+abstract class AbstractEnablementBuilder<NextBuilder, Meta extends IngMeta> extends IngMetaBuilder<Meta> {
 	protected abstract createRequestAndResponseBuilder(): NextBuilder;
 
-	enable(): NextBuilder {
-		this.meta.enabled = true;
-		return this.createRequestAndResponseBuilder();
-	}
-
-	disable(): NextBuilder {
-		this.meta.enabled = false;
+	enable(enabled: boolean = true): NextBuilder {
+		this.meta.enabled = enabled;
 		return this.createRequestAndResponseBuilder();
 	}
 }
 
-abstract class AbstractStepsBuilder<Publisher> extends IngMetaBuilder {
+abstract class AbstractStepsBuilder<Publisher, Meta extends IngMeta> extends IngMetaBuilder<Meta> {
 	protected abstract createPublisher(): Publisher;
 
 	steps(step: PipelineStepDef, ...moreSteps: Array<PipelineStepDef>): Publisher {
@@ -32,7 +29,7 @@ abstract class AbstractStepsBuilder<Publisher> extends IngMetaBuilder {
 	}
 }
 
-class RestApiAuthenticationBuilder extends IngMetaBuilder {
+class RestApiAuthenticationBuilder extends IngMetaBuilder<RestApiIngMeta> {
 	private createApiEnablementBuilder(): RestApiEnablementBuilder {
 		return new RestApiEnablementBuilder(this.meta);
 	}
@@ -54,18 +51,18 @@ class RestApiAuthenticationBuilder extends IngMetaBuilder {
 		return this.addAuthentication(() => this.meta.authorizations = 'authenticated');
 	}
 
-	roles(role: string, ...restRoles: Array<string>) {
-		return this.addAuthentication(() => this.meta.authorizations = [role, ...restRoles]);
+	permissions(permissionCode: string, ...otherPermissionCodes: Array<string>) {
+		return this.addAuthentication(() => this.meta.authorizations = [permissionCode, ...otherPermissionCodes]);
 	}
 }
 
-class RestApiEnablementBuilder extends AbstractEnablementBuilder<RestApiRequestAndResponseBuilder> {
+class RestApiEnablementBuilder extends AbstractEnablementBuilder<RestApiRequestAndResponseBuilder, RestApiIngMeta> {
 	protected createRequestAndResponseBuilder(): RestApiRequestAndResponseBuilder {
 		return new RestApiRequestAndResponseBuilder(this.meta);
 	}
 }
 
-class RestApiStepsBuilder extends AbstractStepsBuilder<RestApiBuilder> {
+class RestApiStepsBuilder extends AbstractStepsBuilder<RestApiBuilder, RestApiIngMeta> {
 	protected createPublisher(): RestApiBuilder {
 		return new RestApiBuilder(this.meta);
 	}
@@ -128,7 +125,7 @@ class RestApiRequestBuilder extends RestApiResponseBuilder {
 	}
 }
 
-class RestApiBuilder extends IngMetaBuilder {
+class RestApiBuilder extends IngMetaBuilder<RestApiIngMeta> {
 	publish(): RestAPI {
 		return asT<RestAPI>(this.meta);
 	}
@@ -145,19 +142,19 @@ export class RestApiPublisher {
 	}
 }
 
-class ServiceApiEnablementBuilder extends AbstractEnablementBuilder<ServiceApiApiStepsBuilder> {
-	protected createRequestAndResponseBuilder(): ServiceApiApiStepsBuilder {
-		return new ServiceApiApiStepsBuilder(this.meta);
+class ServiceApiEnablementBuilder extends AbstractEnablementBuilder<ServiceApiStepsBuilder, ServiceApiIngMeta> {
+	protected createRequestAndResponseBuilder(): ServiceApiStepsBuilder {
+		return new ServiceApiStepsBuilder(this.meta);
 	}
 }
 
-class ServiceApiApiStepsBuilder extends AbstractStepsBuilder<ServiceApiBuilder> {
+class ServiceApiStepsBuilder extends AbstractStepsBuilder<ServiceApiBuilder, ServiceApiIngMeta> {
 	protected createPublisher(): ServiceApiBuilder {
 		return new ServiceApiBuilder(this.meta);
 	}
 }
 
-class ServiceApiBuilder extends IngMetaBuilder {
+class ServiceApiBuilder extends IngMetaBuilder<ServiceApiIngMeta> {
 	publish(): ServiceAPI {
 		return asT<ServiceAPI>(this.meta);
 	}

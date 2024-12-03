@@ -2,7 +2,7 @@
 	"name": "@rainbow-n12/shared-model",
 	"version": "0.1.0",
 	"description": "shared model",
-	"main": "index.cjs.js",
+	"main": "index.cjs",
 	"module": "index.js",
 	"types": "index.d.ts",
 	"type": "module",

@@ -10,18 +10,18 @@ import {
 	TypeOrmBySQLPipelineStepBuilderOptions
 } from '@rainbow-o23/n4';
 import {PipelineStepSetsBuilderOptions} from '@rainbow-o23/n4/src/lib/step-builder/basic/step-sets-builder';
-import {RestApiMeta, ServiceApiMeta, Step} from '../types';
+import {RestApiMeta, ServiceApiMeta, ServiceFunctionMeta, Step} from '../types';
 import {asT} from './functions';
 
-export const asServiceApi = (code: string): Readonly<ServiceApiMeta> => {
-	return {name: code, code, type: 'pipeline'};
-};
 export const asRestApi = (code: string, route: string, method: ExposedPipelineDef['method']): Readonly<RestApiMeta> => {
 	const def: RestApiMeta = {name: code, code, route, method, type: 'pipeline'};
 	if (method !== 'get') {
 		def.body = true;
 	}
 	return def;
+};
+export const asServiceApi = (code: string): Readonly<ServiceApiMeta> => {
+	return {name: code, code, type: 'pipeline'};
 };
 /** create given step def to be of type Step */
 export const asStep = <O extends PipelineStepBuilderOptions>(def: Omit<Step<O>, 'type'>): Step<O> => {

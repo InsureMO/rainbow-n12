@@ -1,4 +1,5 @@
 export * from './lib/common';
+export * from './lib/validation';
 
 export * from './lib/entities';
 

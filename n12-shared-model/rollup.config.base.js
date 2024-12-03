@@ -9,7 +9,7 @@ export const buildConfig = (lint) => {
 		input: './src/index.ts',
 		output: [
 			{format: 'es', dir: '.'},
-			{format: 'cjs', file: './index.cjs.js'}
+			{format: 'cjs', file: './index.cjs'}
 		],
 		plugins: [
 			lint ? eslint({exclude: ['../node_modules/**', 'node_modules/**']}) : null,

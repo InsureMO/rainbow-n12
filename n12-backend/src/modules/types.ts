@@ -4,16 +4,13 @@ import {
 	ExposedPipelineDef,
 	PipelineDef,
 	PipelineStepBuilderOptions,
-	PipelineStepDef
+	PipelineStepDef,
+	PipelineStepSetsDef
 } from '@rainbow-o23/n4';
 
 export interface DefMeta {
 	name: string;
 	code: string;
-}
-
-export interface ServiceApiMeta extends DefMeta {
-	type: 'pipeline';
 }
 
 export interface RestApiMeta extends DefMeta {
@@ -23,8 +20,17 @@ export interface RestApiMeta extends DefMeta {
 	body?: ExposedPipelineDef['body'];
 }
 
+export interface ServiceApiMeta extends DefMeta {
+	type: 'pipeline';
+}
+
+export interface ServiceFunctionMeta extends DefMeta {
+	type: 'step';
+}
+
 export type RestAPI = ExposedPipelineDef & DefEnablement;
 export type ServiceAPI = PipelineDef & DefEnablement;
+export type ServiceFunction = (PipelineStepDef | PipelineStepSetsDef) & DefEnablement;
 
 // steps
 type PickNotFuncBody<T> = {

@@ -10,5 +10,5 @@ yarn-error.log*
 
 /index.d.ts
 /index.js
-/index.cjs.js
+/index.cjs
 /lib/
