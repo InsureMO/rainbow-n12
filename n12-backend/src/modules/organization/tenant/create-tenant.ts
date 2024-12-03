@@ -5,12 +5,12 @@ import {buildSnippet, deleteFieldsForCreation, RestApiPublisher, Steps} from '..
 import {
 	AllowCreateTenant,
 	ErrTenantCodeMustProvided,
+	ErrTenantDerivationNotSupported,
+	ErrTenantHierarchyNotSupported,
 	ErrTenantIdMustNotProvided,
 	ErrTenantNameMustProvided,
 	ErrTenantTypeMustProvided,
 	ErrTenantTypeNotSupported,
-	ErrTenantDerivationNotSupported,
-	ErrTenantHierarchyNotSupported,
 	RestApiCreateTenant
 } from '../constants';
 
@@ -37,35 +37,32 @@ export const CreateTenant = () => {
 			$.touch(data.code).isBlank().success(() => validation.error(ErrTenantCodeMustProvided).message('Tenant code must be provided.').at('code'));
 			$.touch(data.name).isBlank().success(() => validation.error(ErrTenantNameMustProvided).message('Tenant name must be provided.').at('name'));
 			$.touch(data.type).isBlank()
-				.success(() => validation.error(ErrTenantTypeMustProvided).message('Tenant type must be provided.').at('type'))
-				.failure((type: TenantType) => {
-					const availableTenantTypes = [TenantType.TENANT, TenantType.SUBORDINATE_TENANT, TenantType.DERIVED_TENANT];
-					switch (type) {
-						case TenantType.TENANT:
-							$.touch(data.parentTenantId).isNotBlank()
-								.success(() => validation.error(ErrTenantHierarchyNotSupported)
-									.message(`Tenant type[${TenantType.TENANT}] doesn't support hierarchy, it's top level.`).at('parentTenantId'));
-							$.touch(data.originTenantId).isNotBlank()
-								.success(() => validation.error(ErrTenantDerivationNotSupported)
-									.message(`Tenant type[${TenantType.TENANT}] doesn't support derivation, it's top level.`).at('originTenantId'));
-							break;
-						case TenantType.SUBORDINATE_TENANT:
-							$.touch(data.originTenantId).isNotBlank()
-								.success(() => validation.error(ErrTenantDerivationNotSupported)
-									.message(`Tenant type[${TenantType.SUBORDINATE_TENANT}] doesn't support derivation, it's subordinate.`).at('originTenantId'));
-							break;
-						case TenantType.DERIVED_TENANT:
-							$.touch(data.parentTenantId).isNotBlank()
-								.success(() => validation.error(ErrTenantHierarchyNotSupported)
-									.message(`Tenant type[${TenantType.DERIVED_TENANT}] doesn't support hierarchy, it's derived.`).at('parentTenantId'));
-							break;
-						default:
-							$.touch(data.type).isBlank()
-								.success(() => validation.error(ErrTenantTypeMustProvided).message('Tenant type must be provided.').at('type'))
-								.failure(() => validation.error(ErrTenantTypeNotSupported)
-									.message(`Tenant type must be one of [${availableTenantTypes.map(t => `${t}`).join(', ')}].`).at('type'));
-					}
-				});
+				.success(() => validation.error(ErrTenantTypeMustProvided).message('Tenant type must be provided.').at('type'));
+			const availableTenantTypes = [TenantType.TENANT, TenantType.SUBORDINATE_TENANT, TenantType.DERIVED_TENANT];
+			$.touch(data.type).isNotBlank().isNotAnyOf(TenantType.TENANT, TenantType.SUBORDINATE_TENANT, TenantType.DERIVED_TENANT)
+				.success(() => validation.error(ErrTenantTypeNotSupported)
+					.message(`Tenant type must be one of [${availableTenantTypes.map(t => `${t}`).join(', ')}].`).at('type'));
+			// check hierarchy and derivation
+			switch (data.type) {
+				case TenantType.TENANT:
+					$.touch(data.parentTenantId).isNotBlank()
+						.success(() => validation.error(ErrTenantHierarchyNotSupported)
+							.message(`Tenant type[${TenantType.TENANT}] doesn't support hierarchy, it's top level.`).at('parentTenantId'));
+					$.touch(data.originTenantId).isNotBlank()
+						.success(() => validation.error(ErrTenantDerivationNotSupported)
+							.message(`Tenant type[${TenantType.TENANT}] doesn't support derivation, it's top level.`).at('originTenantId'));
+					break;
+				case TenantType.SUBORDINATE_TENANT:
+					$.touch(data.originTenantId).isNotBlank()
+						.success(() => validation.error(ErrTenantDerivationNotSupported)
+							.message(`Tenant type[${TenantType.SUBORDINATE_TENANT}] doesn't support derivation, it's subordinate.`).at('originTenantId'));
+					break;
+				case TenantType.DERIVED_TENANT:
+					$.touch(data.parentTenantId).isNotBlank()
+						.success(() => validation.error(ErrTenantHierarchyNotSupported)
+							.message(`Tenant type[${TenantType.DERIVED_TENANT}] doesn't support hierarchy, it's derived.`).at('parentTenantId'));
+					break;
+			}
 			return $factor;
 		})
 	});

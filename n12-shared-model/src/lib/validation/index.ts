@@ -34,6 +34,8 @@ export interface IValidationResult {
 	warns(): Array<ValidateItem>;
 	attentions(): Array<ValidateItem>;
 	infos(): Array<ValidateItem>;
+	has(code: string): boolean;
+	hasAny(code: string, ...codes: Array<string>): boolean;
 	toResponse(): ValidationFailedResponse;
 }
 
@@ -107,6 +109,15 @@ export class ValidationResult implements IValidationResult {
 
 	public infos(): Array<ValidateItem> {
 		return this.fragments.filter(({level}) => level === ValidateLevel.INFO);
+	}
+
+	public has(code: string): boolean {
+		return this.fragments.some(fragment => fragment.code === code);
+	}
+
+	public hasAny(code: string, ...codes: Array<string>): boolean {
+		const matches = [code, ...codes];
+		return this.fragments.some(fragment => matches.includes(fragment.code));
 	}
 
 	public toResponse(): ValidationFailedResponse {

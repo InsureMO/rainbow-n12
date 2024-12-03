@@ -25,6 +25,9 @@ export enum TenantType {
 
 /**
  * Data accessibility by {@link #shareDataToParent} and {@link #shareDataToOrigin} is contagious.
+ * service provider doesn't allow derived and subordinate tenant,
+ * other types allows subordinate tenant,
+ * subordinate tenant doesn't allow derived tenant.
  */
 export interface Tenant extends Auditable, OptimisticLock {
 	/** sequence */
@@ -37,18 +40,24 @@ export interface Tenant extends Auditable, OptimisticLock {
 	description?: string;
 	/** cannot change once created */
 	type?: TenantType;
+	/** for {@link SUBORDINATE_TENANT} */
 	parentTenantId?: TenantId;
 	/** includes parent id */
 	ancestorTenantIds?: TenantIds;
 	/** works only when type is {@link SUBORDINATE_TENANT}, default false */
 	shareDataToParent?: boolean;
+	/** for {@link DERIVED_TENANT} */
 	originTenantId?: TenantId;
 	/** includes origin id */
 	originTenantIds?: TenantIds;
 	/** works only when type is {@link DERIVED_TENANT}, default false */
 	shareDataToOrigin?: boolean;
-	/** share data to service provider or not, default true */
+	/** share data to service provider or not, default true. */
 	shareDataToServiceProvider?: boolean;
+	/** allow subordinate tenant or not, default false. always false for {@link SERVICE_PROVIDER} */
+	allowSubordinate?: boolean;
+	/** allow derived tenant or not, default false. always false for {@link SERVICE_PROVIDER} and {@link SUBORDINATE_TENANT} */
+	allowDerived?: boolean;
 }
 
 export interface Organization extends Auditable, Tenanted, OptimisticLock {
