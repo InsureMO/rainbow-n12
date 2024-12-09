@@ -1,3 +1,4 @@
+export * from './permission-restriction';
 export * from './permission';
 
 export * from './organization';

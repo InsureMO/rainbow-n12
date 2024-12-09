@@ -2,6 +2,7 @@
 export type AnyValue = any;
 export type Undefinable<T> = T | undefined | null;
 export type Nullable<T> = T | null;
+export type Require<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
 /** might be a number, such as snowflake. */
 export type RdsId = string;
@@ -20,5 +21,8 @@ export type TenantCode = string;
 export type TenantName = string;
 /** tenant ids concatenated by comma */
 export type TenantIds = string;
+
+export type PermissionCode = string;
+export type RoleCode = string;
 
 export type PipelineCode = string;

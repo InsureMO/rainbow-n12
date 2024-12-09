@@ -19,6 +19,7 @@ export class JwtAuthenticationProvider implements AuthenticationProvider {
 				const token = ValueOperator.of(authorization).isNotBlank().orUseDefault('').value<string>();
 				try {
 					const decoded = jwt.verify(token, ServerConfig.JWT_AUTH_SECURITY_KEY, {complete: true});
+					// TODO get user from decoded, and find roles
 					const {payload, signature} = asT<Jwt>(decoded);
 					return {authorized: true, authentication: {userId: '-1'}, roles: []};
 				} catch {

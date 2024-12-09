@@ -135,4 +135,3 @@ export interface UserBelongsTo extends Auditable, Tenanted, OptimisticLock {
 	organId?: RdsId;
 	enabled?: boolean;
 }
-

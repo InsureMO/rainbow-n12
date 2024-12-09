@@ -1,6 +1,6 @@
-import {RdsId} from '../../common';
+import {RdsId, RoleCode} from '../../common';
 import {Auditable, OptimisticLock, Tenanted} from '../common';
-import {AuthorizedPermissionRestrictions} from './permission';
+import {AuthorizedPermissionRestrictions} from './permission-restriction';
 
 /**
  * role could belong to one of {@link JobTitle}/{@link Department}/{@link Organization}/{@link Tenant}
@@ -9,14 +9,14 @@ export interface Role extends Auditable, Tenanted, OptimisticLock {
 	/** sequence */
 	roleId?: RdsId;
 	/** unique in tenant */
-	code?: string;
+	code?: RoleCode;
 	description?: string;
 	enabled?: boolean;
-	/** fk to {@link JobTitle} */
+	/** fk to {@link JobTitle}, user with this job title then get this role automatically */
 	jobTitleId?: RdsId;
-	/** fk to {@link Department} */
+	/** fk to {@link Department}, this role can be granted to users who in this department */
 	deptId?: RdsId;
-	/** fk to {@link Organization} */
+	/** fk to {@link Organization}, this role can be granted to users who in this organization */
 	organId?: RdsId;
 	/**
 	 * inherited by descendants or not, default true
@@ -26,19 +26,20 @@ export interface Role extends Auditable, Tenanted, OptimisticLock {
 	inherit?: boolean;
 	/**
 	 * allow cross granting or not, default false.
-	 * cannot grant to users that are not in the same job title/department/organ.
+	 * cannot grant to users that are not in the same department/organ.
 	 */
 	allowCrossGranting?: boolean;
 }
 
 /**
  * permissions granted to role,
- * restrictions might be no/partially/fully declared in this role.
+ * restrictions has the same structure with it in permission, and values might be no/partially/fully declared in this role.
  */
 export interface RolePermission extends Auditable, Tenanted, OptimisticLock {
 	rpId?: RdsId;
 	/** fk to {@link Role} */
 	roleId?: RdsId;
+	/** permission must be granted to tenant */
 	permissionCode?: string;
 	/**
 	 * leave it null if no permission restriction defined in this role, or no restriction in this permission.
