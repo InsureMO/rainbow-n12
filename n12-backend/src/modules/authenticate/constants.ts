@@ -1,10 +1,10 @@
-import {asServiceApi} from '../utils';
+import {asRestApi, asServiceApi} from '../utils';
 
-export class AuthenticateConstants {
-	static readonly Authenticate = asServiceApi('Authenticate');
+// rest apis
+export const Authenticate = asServiceApi('Authenticate');
+export const SignIn = asRestApi('SignIn', '/sign-in', 'post');
+export const SsoSignIn = asRestApi('SsoSignIn', '/sso-sign-in', 'post');
 
-	// noinspection JSUnusedLocalSymbols
-	private constructor() {
-		// avoid extend
-	}
-}
+// errors
+export const ErrUserNameMustProvided = 'N12-AUT-00001';
+export const ErrPasswordMustProvided = 'N12-AUT-00002';

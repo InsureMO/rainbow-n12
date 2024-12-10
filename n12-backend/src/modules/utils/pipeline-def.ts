@@ -10,7 +10,7 @@ import {
 	TypeOrmBySQLPipelineStepBuilderOptions
 } from '@rainbow-o23/n4';
 import {PipelineStepSetsBuilderOptions} from '@rainbow-o23/n4/src/lib/step-builder/basic/step-sets-builder';
-import {RestApiMeta, ServiceApiMeta, ServiceFunctionMeta, Step} from '../types';
+import {RestApiMeta, ServiceApiMeta, Step} from '../types';
 import {asT} from './functions';
 
 export const asRestApi = (code: string, route: string, method: ExposedPipelineDef['method']): Readonly<RestApiMeta> => {
@@ -44,14 +44,18 @@ const useSets = (name: string, def: Omit<PipelineStepSetsBuilderOptions, 'name' 
 const useConditional = (name: string, def: Omit<ConditionalPipelineStepSetsBuilderOptions, 'name' | 'use'>): Step<ConditionalPipelineStepSetsBuilderOptions> => {
 	return useStep<ConditionalPipelineStepSetsBuilderOptions>(name, DefaultSteps.CONDITIONAL_SETS, def);
 };
-const useTypeOrmLoadBySQL = (name: string, def: Omit<TypeOrmBySQLPipelineStepBuilderOptions, 'name' | 'use'>): Step<TypeOrmBySQLPipelineStepBuilderOptions> => {
+const useTypeOrmLoadOneBySQL = (name: string, def: Omit<TypeOrmBySQLPipelineStepBuilderOptions, 'name' | 'use'>): Step<TypeOrmBySQLPipelineStepBuilderOptions> => {
+	return useStep<TypeOrmBySQLPipelineStepBuilderOptions>(name, DefaultSteps.TYPEORM_LOAD_ONE_BY_SQL, def);
+};
+const useTypeOrmLoadManyBySQL = (name: string, def: Omit<TypeOrmBySQLPipelineStepBuilderOptions, 'name' | 'use'>): Step<TypeOrmBySQLPipelineStepBuilderOptions> => {
 	return useStep<TypeOrmBySQLPipelineStepBuilderOptions>(name, DefaultSteps.TYPEORM_LOAD_MANY_BY_SQL, def);
 };
 export const Steps = {
 	snippet: useSnippet,
 	sets: useSets,
 	conditional: useConditional,
-	loadBySQL: useTypeOrmLoadBySQL
+	loadOneBySQL: useTypeOrmLoadOneBySQL,
+	loadManyBySQL: useTypeOrmLoadManyBySQL
 };
 export const buildFromInput = <In extends any, InFragment extends any>(func: GetInFragmentFromRequestFunc<In, InFragment>): GetInFragmentFromRequestFunc<In, InFragment> => func;
 export const buildToOutput = <In extends any, Out extends any, OutFragment extends any>(func: SetOutFragmentToResponseFunc<In, Out, OutFragment>): SetOutFragmentToResponseFunc<In, Out, OutFragment> => func;

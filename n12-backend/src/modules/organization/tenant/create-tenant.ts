@@ -1,6 +1,6 @@
 import {Tenant, TenantType} from '@rainbow-n12/shared-model';
 import {ServerConfig} from '../../../server-envs';
-import {PreparedDataAndValidation, PrepareForValidation, ResponseOnValidationNotOk} from '../../common';
+import {PreparedDataAndValidation, PrepareForValidation, ResponseOnValidationNotOkOrElse} from '../../common';
 import {buildSnippet, deleteFieldsForCreation, RestApiPublisher, Steps} from '../../utils';
 import {
 	AllowCreateTenant,
@@ -88,10 +88,10 @@ export const CreateTenant = () => {
 			CleanRequestData,
 			PrepareForValidation,
 			CheckTenantId,
-			ResponseOnValidationNotOk([
+			ResponseOnValidationNotOkOrElse(
 				CheckTenantType,
 				CheckOtherFields
-			])
+			)
 		)
 		.publish();
 };

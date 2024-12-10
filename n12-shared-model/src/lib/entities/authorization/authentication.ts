@@ -63,4 +63,3 @@ export interface UserLoginLog extends Auditable, Tenanted {
 	/** try times after last success login */
 	consecutiveTryTimes?: number;
 }
-

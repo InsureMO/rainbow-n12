@@ -33,7 +33,7 @@ export const AskImportConfigList = () => {
 	// 4. compute page number again
 	// 5. execute item sql to get items
 	// 6. build response by items and pageable
-	const LoadConfigList = Steps.loadBySQL('Load import config list', {
+	const LoadConfigList = Steps.loadManyBySQL('Load import config list', {
 		fromInput: buildFromInput<AskImportConfigRequest, QueryBasis>(async ($factor, request, $) => {
 			const {type, pageSize, pageNumber} = $factor ?? {};
 			const tenantId = asT<Tenanted>(request.$context?.authorization)?.tenantId;

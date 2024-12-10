@@ -46,6 +46,10 @@ class ConfigDelegate implements Pick<Config, 'getBoolean' | 'getNumber' | 'getSt
 		return this.getString(ServerConfigConst.AuthJwtSecurityKey, '');
 	}
 
+	public get USER_PWD_SIGNIN_ENABLED(): boolean {
+		return this.getBoolean(ServerConfigConst.UserPwdSigninEnabled, false);
+	}
+
 	public get MULTIPLE_TENANT_ENABLED(): boolean {
 		return this.getBoolean(ServerConfigConst.MultipleTenantEnabled, false);
 	}
@@ -58,6 +62,8 @@ export const ServerConfigConst = {
 	// authentication, jwt
 	AuthJwtEnabled: 'app.authentication.jwt.enabled',
 	AuthJwtSecurityKey: 'app.authentication.jwt.security.key',
+	// authentication, user+pwd sign-in
+	UserPwdSigninEnabled: 'app.user.pwd.signin.enabled',
 	// tenant, organization related
 	MultipleTenantEnabled: 'app.tenant.multiple.enabled'
 } as const;

@@ -1,5 +1,5 @@
 import {buildConditionalCheck, buildSnippet, ServiceApiPublisher, Steps} from '../utils';
-import {AuthenticateConstants} from './constants';
+import {Authenticate as AuthenticateApi} from './constants';
 import {JwtAuthenticationProvider} from './jwt-authenticate';
 import {AuthenticationProvider, Authorization, AuthorizationRequest, MightBeAuthorized} from './types';
 
@@ -35,7 +35,7 @@ export const Authenticate = () => {
 	});
 
 	return ServiceApiPublisher
-		.use(AuthenticateConstants.Authenticate)
+		.use(AuthenticateApi)
 		.enable()
 		.steps(Authorize)
 		.publish();

@@ -3,7 +3,7 @@ import {PipelineStepDef} from '@rainbow-o23/n4';
 import {buildConditionalCheck, buildSnippet, Steps} from '../utils';
 import {PreparedDataAndValidation} from './prepare-validation';
 
-export const ResponseOnValidationNotOk = (otherwise: Array<PipelineStepDef>) => {
+export const ResponseOnValidationNotOkOrElse = (step1: PipelineStepDef, ...steps: Array<PipelineStepDef>) => {
 	return Steps.conditional('ResponseOnValidationNotOk', {
 		check: buildConditionalCheck<PreparedDataAndValidation<any>>(async ($factor) => !$factor.validationResult.ok()),
 		steps: [Steps.snippet('ResponseValidationFailed', {
@@ -11,6 +11,6 @@ export const ResponseOnValidationNotOk = (otherwise: Array<PipelineStepDef>) => 
 				return $factor.validationResult.toResponse();
 			})
 		})],
-		otherwise
+		otherwise: [step1, ...steps]
 	});
 };

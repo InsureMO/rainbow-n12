@@ -12,7 +12,7 @@
 		"dev:start": "CFG_ENV_FILE=envs/common/.env.basic,envs/common/.env.n12,envs/dev/.env.rds,envs/dev/.server nest start --watch",
 		"dev:standalone:start": "CFG_ENV_FILE=envs/common/.env.basic,envs/common/.env.n12,envs/dev/.env.rds,envs/dev/.server node dist/server",
 		"dev:build:start": "yarn build:standalone && yarn dev:standalone:start",
-		"scripts": "CFG_ENV_FILE=envs/common/.env.basic,envs/common/.env.n12,envs/dev/.env.rds,envs/dev/.env.scripts node dist/scripts"
+		"scripts-meta": "CFG_ENV_FILE=envs/common/.env.basic,envs/common/.env.n12,envs/dev/.env.rds,envs/dev/.env.scripts.meta node dist/scripts"
 	},
 	"license": "UNLICENSED",
 	"dependencies": {
