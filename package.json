@@ -10,7 +10,8 @@
 		"build-frontend": "cd ./n12-frontend && yarn build",
 		"start-frontend": "cd ./n12-frontend && yarn start",
 		"build-backend": "cd ./n12-backend && yarn build",
-		"start-backend": "cd ./n12-backend && yarn start"
+		"start-backend": "cd ./n12-backend && yarn start",
+		"build-share-model|start-backend": "yarn build-share-model && cd ./n12-backend && yarn start"
 	},
 	"volta": {
 		"node": "22.11.0",

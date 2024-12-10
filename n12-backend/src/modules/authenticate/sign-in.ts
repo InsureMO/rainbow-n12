@@ -44,11 +44,11 @@ export const SignIn = () => {
 			return $.touch($factor.data.tenantCode).isNotBlank().ok();
 		}),
 		steps: [Steps.loadOneBySQL('FindTenantIdByCode', {
-			fromInput: buildFromInput<DataAndValidation, FindTenantQueryBasis>(async ($factor, _, $) => {
+			fromInput: buildFromInput<DataAndValidation, FindTenantQueryBasis>(async $factor => {
 				return {params: {tenantCode: $factor.data.tenantCode}};
 			}),
-			sql: 'SELECT TENANT_ID AS "tenantId" FROM T_TENANT WHERE TENANT_CODE = $tenantCode',
-			toOutput: buildToOutput<DataAndValidation, DataAndValidation, Tenanted>(async ($result, $request, $) => {
+			sql: 'SELECT TENANT_ID AS "tenantId" FROM T_TENANT WHERE CODE = $tenantCode',
+			toOutput: buildToOutput<DataAndValidation, DataAndValidation, Tenanted>(async ($result, $request) => {
 				const $factor = $request.content;
 				$factor.data.tenantId = $result?.tenantId;
 				return $factor;

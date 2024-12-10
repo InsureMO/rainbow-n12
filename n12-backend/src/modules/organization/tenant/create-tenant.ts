@@ -18,7 +18,7 @@ type DataAndValidation = PreparedDataAndValidation<Tenant>;
 
 export const CreateTenant = () => {
 	const CleanRequestData = Steps.snippet('CleanRequestData', {
-		snippet: buildSnippet<Tenant, Tenant>(async ($factor, _, $) => {
+		snippet: buildSnippet<Tenant, Tenant>(async $factor => {
 			deleteFieldsForCreation($factor);
 			// tenant ids of hierarchy is useless and system will fill it automatically
 			delete $factor.ancestorTenantIds;

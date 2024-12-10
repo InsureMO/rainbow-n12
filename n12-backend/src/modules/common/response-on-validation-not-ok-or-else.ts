@@ -7,7 +7,7 @@ export const ResponseOnValidationNotOkOrElse = (step1: PipelineStepDef, ...steps
 	return Steps.conditional('ResponseOnValidationNotOk', {
 		check: buildConditionalCheck<PreparedDataAndValidation<any>>(async ($factor) => !$factor.validationResult.ok()),
 		steps: [Steps.snippet('ResponseValidationFailed', {
-			snippet: buildSnippet<PreparedDataAndValidation<any>, ValidationFailedResponse>(async ($factor, _, $) => {
+			snippet: buildSnippet<PreparedDataAndValidation<any>, ValidationFailedResponse>(async $factor => {
 				return $factor.validationResult.toResponse();
 			})
 		})],
