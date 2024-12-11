@@ -87,22 +87,29 @@ export interface Department extends Auditable, Tenanted, OptimisticLock {
 }
 
 export interface JobTitle extends Auditable, Tenanted, OptimisticLock {
+	/** sequence */
 	jobTitleId?: RdsId;
 	name?: string;
 	description?: string;
-	/** fk to self */
-	parentJobTitleId?: RdsId;
-	/** includes parent id */
-	ancestorJobTitleIds?: RdsIds;
-	/**
-	 * share access granted to its parent job title when it is true, and it is contagious
-	 * which means ancestor job title has all access from its descendant job titles which this flag is true.
-	 */
-	shareAccessToParent?: boolean;
 	/** fk to {@link Department} */
 	deptId?: RdsId;
 	/** fk to {@link Organization} */
 	organId?: RdsId;
+	enabled?: boolean;
+}
+
+/**
+ * job title can be shared to
+ * 1. within same tenant, organization or department
+ * 2. cross tenant, and the origin tenant must be subordinate or derived of the share to tenant
+ */
+export interface JobTitleShareTo extends Auditable, OptimisticLock {
+	/** sequence */
+	shareToId?: RdsId;
+	/** fk to {@link JobTitle} */
+	fromJobTitleId: RdsId;
+	/** fk to {@link JobTitle} */
+	toJobTitleId?: RdsId;
 	enabled?: boolean;
 }
 
@@ -117,14 +124,20 @@ export interface User extends Auditable, Tenanted, OptimisticLock {
 	email?: string;
 	mobile?: string;
 	enabled?: boolean;
+	/** fk to {@link JobTitle} */
+	jobTitleId?: RdsId;
+	/** fk to {@link Department} */
+	deptId?: RdsId;
+	/** fk to {@link Organization} */
+	organId?: RdsId;
 }
 
 /**
- *  user can belong to multiple organizations, departments, and with multiple job titles.
+ *  user can work in multiple organizations, departments, and with multiple job titles.
  */
-export interface UserBelongsTo extends Auditable, Tenanted, OptimisticLock {
+export interface UserWorkIn extends Auditable, Tenanted, OptimisticLock {
 	/** sequence */
-	belongsToId?: RdsId;
+	workInId?: RdsId;
 	/** fk to {@link User} */
 	userId?: RdsId;
 	/** fk to {@link JobTitle} */

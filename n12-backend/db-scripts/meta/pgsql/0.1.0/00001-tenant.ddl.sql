@@ -19,7 +19,12 @@ create table t_tenant
     share_data_to_origin           bool          not null default false,
     share_data_to_service_provider bool          not null default true,
     allow_subordinate              bool          not null default false,
-    allow_derived                  bool          not null default false
+    allow_derived                  bool          not null default false,
+    version                        integer       not null default 1,
+    created_at                     timestamp     not null default now(),
+    created_by                     bigint,
+    last_modified_at               timestamp     not null default now(),
+    last_modified_by               bigint
 );
 
 comment on table t_tenant is 'All tenants';
@@ -40,4 +45,8 @@ comment on column t_tenant.allow_subordinate is 'Allow subordinate or not';
 comment on column t_tenant.allow_derived is 'Allow derived or not';
 
 create unique index t_tenant__code on t_tenant (code);
-
+create index t_tenant__type on t_tenant (type);
+create index t_tenant__parent on t_tenant (parent_tenant_id);
+create index t_tenant__ancestors on t_tenant (ancestor_tenant_ids);
+create index t_tenant__origin on t_tenant (origin_tenant_id);
+create index t_tenant__origins on t_tenant (origin_tenant_ids);
