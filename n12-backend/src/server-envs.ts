@@ -1,5 +1,5 @@
 import {Undefinable} from '@rainbow-n12/shared-model';
-import {DecimalInRangeOptions} from '@rainbow-n19/n1/src/lib/value-operators/test-decimal-actions';
+import {DecimalInRangeOptions} from '@rainbow-n19/n1';
 import {Config} from '@rainbow-o23/n1';
 import {BootstrapOptions} from '@rainbow-o23/n2';
 

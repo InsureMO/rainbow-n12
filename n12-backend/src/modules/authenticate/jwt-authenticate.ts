@@ -1,9 +1,9 @@
 import {ValueOperator} from '@rainbow-n19/n1';
 import {Config} from '@rainbow-o23/n1';
-import {PipelineStepDef, PipelineStepSetsDef} from '@rainbow-o23/n4';
+import {PipelineStepDef} from '@rainbow-o23/n4';
 import jwt, {Jwt} from 'jsonwebtoken';
 import {ServerConfig} from '../../server-envs';
-import {asT, buildSnippet, Steps} from '../utils';
+import {asT, Steps} from '../utils';
 import {AuthenticationProvider, Authorization, MightBeAuthorized} from './types';
 
 export class JwtAuthenticationProvider implements AuthenticationProvider {
@@ -12,8 +12,8 @@ export class JwtAuthenticationProvider implements AuthenticationProvider {
 
 	public constructor() {
 		this.name = 'ShouldAuthenticateByJwt';
-		this.authorizeStep = Steps.snippet('JwtAuthorize', {
-			snippet: buildSnippet<MightBeAuthorized, Authorization>(async ($factor) => {
+		this.authorizeStep = Steps.snippet<MightBeAuthorized, Authorization>('JwtAuthorize')
+			.execute(async ($factor) => {
 				// TODO do jwt authenticate
 				const {request: {authorization} = {}} = $factor;
 				const token = ValueOperator.of(authorization).isNotBlank().orUseDefault('').value<string>();
@@ -25,16 +25,16 @@ export class JwtAuthenticationProvider implements AuthenticationProvider {
 				} catch {
 					return {authorized: false, roles: []};
 				}
-			}),
-			merge: 'authorization'
-		});
+			})
+			.mergeAsProperty('authorization')
+			.end();
 	}
 
 	public should(_config: Config): boolean {
 		return ServerConfig.JWT_AUTH_ENABLED;
 	}
 
-	public createSteps(): Array<PipelineStepDef | PipelineStepSetsDef> {
+	public createSteps(): [PipelineStepDef, ...Array<PipelineStepDef>] {
 		return [this.authorizeStep];
 	}
 }

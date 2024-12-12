@@ -1,7 +1,7 @@
 import {Tenant, TenantType} from '@rainbow-n12/shared-model';
 import {ServerConfig} from '../../../server-envs';
 import {PreparedDataAndValidation, PrepareForValidation, ResponseOnValidationNotOkOrElse} from '../../common';
-import {buildSnippet, deleteFieldsForCreation, RestApiPublisher, Steps} from '../../utils';
+import {deleteFieldsForCreation, RestApiPublisher, Steps} from '../../utils';
 import {
 	AllowCreateTenant,
 	ErrTenantCodeMustProvided,
@@ -17,24 +17,22 @@ import {
 type DataAndValidation = PreparedDataAndValidation<Tenant>;
 
 export const CreateTenant = () => {
-	const CleanRequestData = Steps.snippet('CleanRequestData', {
-		snippet: buildSnippet<Tenant, Tenant>(async $factor => {
+	const CleanRequestData = Steps.snippet<Tenant, Tenant>('CleanRequestData')
+		.execute(async $factor => {
 			deleteFieldsForCreation($factor);
 			// tenant ids of hierarchy is useless and system will fill it automatically
 			delete $factor.ancestorTenantIds;
 			delete $factor.originTenantIds;
 			return $factor;
-		})
-	});
-	const CheckTenantId = Steps.snippet('CheckTenantId', {
-		snippet: buildSnippet<DataAndValidation, DataAndValidation>(async ($factor, _, $) => {
+		});
+	const CheckTenantId = Steps.snippet<DataAndValidation, DataAndValidation>('CheckTenantId')
+		.execute(async ($factor, _, $) => {
 			const {data, validationResult: validation} = $factor;
 			$.touch(data.tenantId).isNotBlank().success(() => validation.error(ErrTenantIdMustNotProvided).message('Tenant id must not be provided.').at('tenantId'));
 			return $factor;
-		})
-	});
-	const CheckTenantType = Steps.snippet('CheckTenantType', {
-		snippet: buildSnippet<DataAndValidation, DataAndValidation>(async ($factor, _, $) => {
+		});
+	const CheckTenantType = Steps.snippet<DataAndValidation, DataAndValidation>('CheckTenantType')
+		.execute(async ($factor, _, $) => {
 			const {data, validationResult: validation} = $factor;
 			$.touch(data.type).isBlank()
 				.success(() => validation.error(ErrTenantTypeMustProvided).message('Tenant type must be provided.').at('type'));
@@ -43,15 +41,14 @@ export const CreateTenant = () => {
 				.success(() => validation.error(ErrTenantTypeNotSupported)
 					.message(`Tenant type must be one of [${availableTenantTypes.map(t => `${t}`).join(', ')}].`).at('type'));
 			return $factor;
-		})
-	});
+		});
 	// TODO, restriction to create tenant.
 	//  e.g. not allowed to create subordinate tenant under a tenant
 	//  e.g. user under service provider can create any tenant
 	//  e.g. top level tenant can be created only by user under service provider
 	const CheckCreatePermission = null;
-	const CheckOtherFields = Steps.snippet('CheckOtherFields', {
-		snippet: buildSnippet<DataAndValidation, DataAndValidation>(async ($factor, _, $) => {
+	const CheckOtherFields = Steps.snippet<DataAndValidation, DataAndValidation>('CheckOtherFields')
+		.execute(async ($factor, _, $) => {
 			const {data, validationResult: validation} = $factor;
 			$.touch(data.code).isBlank().success(() => validation.error(ErrTenantCodeMustProvided).message('Tenant code must be provided.').at('code'));
 			$.touch(data.name).isBlank().success(() => validation.error(ErrTenantNameMustProvided).message('Tenant name must be provided.').at('name'));
@@ -77,8 +74,7 @@ export const CreateTenant = () => {
 					break;
 			}
 			return $factor;
-		})
-	});
+		});
 
 	return RestApiPublisher
 		.use(RestApiCreateTenant)

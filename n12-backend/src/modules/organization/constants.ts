@@ -16,3 +16,4 @@ export const ErrTenantTypeMustProvided = 'N12-ORG-00004';
 export const ErrTenantTypeNotSupported = 'N12-ORG-00005';
 export const ErrTenantHierarchyNotSupported = 'N12-ORG-00006';
 export const ErrTenantDerivationNotSupported = 'N12-ORG-00007';
+

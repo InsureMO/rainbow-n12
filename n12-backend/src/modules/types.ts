@@ -30,14 +30,15 @@ export interface ServiceFunctionMeta extends DefMeta {
 
 export type RestAPI = ExposedPipelineDef & DefEnablement;
 export type ServiceAPI = PipelineDef & DefEnablement;
-export type ServiceFunction = (PipelineStepDef | PipelineStepSetsDef) & DefEnablement;
+export type ServiceFunction = PipelineStepDef & DefEnablement;
 
 // steps
-type PickNotFuncBody<T> = {
+export type Functionalize<T> = T extends ScriptFuncOrBody<infer F> ? F : never;
+export type PickNotFuncBody<T> = {
 	[P in keyof T as T[P] extends ScriptFuncOrBody ? never : P]: T[P];
 }
-type PickFuncBody<T> = {
-	[P in keyof T as T[P] extends ScriptFuncOrBody ? P : never]: T[P] extends ScriptFuncOrBody<infer F> ? F : never;
+export type PickFuncBody<T> = {
+	[P in keyof T as T[P] extends ScriptFuncOrBody ? P : never]: Functionalize<T[P]>;
 }
 export type Step<O extends PipelineStepBuilderOptions> = PipelineStepDef & PickNotFuncBody<O> & PickFuncBody<O>;
 

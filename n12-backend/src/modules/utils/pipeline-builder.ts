@@ -1,6 +1,6 @@
-import {PipelineStepDef} from '@rainbow-o23/n4';
 import {DefMeta, RestAPI, RestApiMeta, ServiceAPI} from '../types';
 import {asT} from './functions';
+import {BuiltStep, StepBuilderEndable} from './pipeline-step-builder';
 
 type RestApiIngMeta = Partial<RestAPI>;
 type ServiceApiIngMeta = Partial<ServiceAPI>;
@@ -23,8 +23,14 @@ abstract class AbstractEnablementBuilder<NextBuilder, Meta extends IngMeta> exte
 abstract class AbstractStepsBuilder<Publisher, Meta extends IngMeta> extends IngMetaBuilder<Meta> {
 	protected abstract createPublisher(): Publisher;
 
-	steps(step: PipelineStepDef, ...moreSteps: Array<PipelineStepDef>): Publisher {
-		this.meta.steps = [step, ...moreSteps];
+	steps(step: BuiltStep, ...moreSteps: Array<BuiltStep>): Publisher {
+		this.meta.steps = [step, ...moreSteps].map(step => {
+			if (step instanceof StepBuilderEndable) {
+				return step.end();
+			} else {
+				return step;
+			}
+		});
 		return this.createPublisher();
 	}
 }

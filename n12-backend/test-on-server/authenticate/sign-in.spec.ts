@@ -1,5 +1,4 @@
-import {SignInRequest} from '@rainbow-n12/shared-model';
-import {ValidateLevel, ValidationFailedResponse} from '@rainbow-n12/shared-model/src';
+import {SignInRequest, ValidateLevel, ValidationFailedResponse} from '@rainbow-n12/shared-model';
 import {ErrPasswordMustProvided, ErrUserNameMustProvided, SignIn} from '../../src/modules/authenticate/constants';
 import {postNoHeader, toAbsUrl} from '../common';
 

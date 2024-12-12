@@ -1,6 +1,6 @@
-import {Authentication, TenantCode} from '@rainbow-n12/shared-model';
+import {Authentication, TenantCode, TenantId} from '@rainbow-n12/shared-model';
 import {Config, PipelineRequestAuthorization} from '@rainbow-o23/n1';
-import {PipelineStepDef, PipelineStepSetsDef} from '@rainbow-o23/n4';
+import {PipelineStepDef} from '@rainbow-o23/n4';
 import {Request} from 'express';
 
 export interface AuthorizationRequest {
@@ -18,10 +18,16 @@ export interface MightBeAuthorized {
 export interface AuthenticationProvider {
 	readonly name: string;
 	should: (config: Config) => boolean;
-	createSteps(): Array<PipelineStepDef | PipelineStepSetsDef>;
+	// at least one step provided
+	createSteps(): [PipelineStepDef, ...Array<PipelineStepDef>];
 }
 
+/**
+ * {@link #tenantId} and {@link #tenantCode} are available for multiple tenant enabled only.
+ * when they are not provided, the username must be unique in system.
+ */
 export interface NamePwdCredentials {
+	tenantId?: TenantId;
 	tenantCode?: TenantCode;
 	username: string;
 	password: string;
