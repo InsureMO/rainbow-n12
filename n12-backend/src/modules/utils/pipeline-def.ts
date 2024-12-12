@@ -1,4 +1,3 @@
-import {GetInFragmentFromRequestFunc, SetOutFragmentToResponseFunc} from '@rainbow-o23/n3';
 import {ExposedPipelineDef, PipelineStepBuilderOptions} from '@rainbow-o23/n4';
 import {RestApiMeta, ServiceApiMeta, Step} from '../types';
 import {asT} from './functions';
@@ -34,4 +33,3 @@ export const Steps = {
 	loadOneBySQL: <In, Out>(name: string) => new TypeOrmLoadOneBySQLStepBuilder<In, Out>(name),
 	loadManyBySQL: <In, Out>(name: string) => new TypeOrmLoadManyBySQLStepBuilder<In, Out>(name)
 };
-export const buildToOutput = <In extends any, Out extends any, OutFragment extends any>(func: SetOutFragmentToResponseFunc<In, Out, OutFragment>): SetOutFragmentToResponseFunc<In, Out, OutFragment> => func;

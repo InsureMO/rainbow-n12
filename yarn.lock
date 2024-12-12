@@ -1799,10 +1799,10 @@
     dayjs "^1.11.13"
     decimal.js "^10.4.3"
 
-"@rainbow-o23/n1@1.0.53":
-  version "1.0.53"
-  resolved "https://registry.yarnpkg.com/@rainbow-o23/n1/-/n1-1.0.53.tgz#d157ca67a78efd3780b36ca652da9e48bd6a4713"
-  integrity sha512-LfQvsJsiAsPQx4yrhSE70L0LEAV/6FKbYjITR1oVvi+zdku8eYhwhdzVK3LnwNk+xW2Wq9TWkwxSr0THbNtfAg==
+"@rainbow-o23/n1@1.0.54":
+  version "1.0.54"
+  resolved "https://registry.yarnpkg.com/@rainbow-o23/n1/-/n1-1.0.54.tgz#fe0e87748d93219e4d55ea965b76e05273e3473b"
+  integrity sha512-pUJLj6+2w68xMuNhAkAWrtqpiuMAACeVw3GeTWgBEKppU8m+MJZPZr8/cE4C0kT5HMBdT0el2DJWloxpP746EQ==
   dependencies:
     "@rainbow-n19/n1" latest
     dayjs "^1.11.13"
@@ -1810,17 +1810,17 @@
     mathjs "^13.2.1"
     nanoid "3.3.7"
 
-"@rainbow-o23/n2@1.0.53":
-  version "1.0.53"
-  resolved "https://registry.yarnpkg.com/@rainbow-o23/n2/-/n2-1.0.53.tgz#29ebb7463a74c4cd3600be63888ce44300550c50"
-  integrity sha512-MN4f7BJCAWhxK6/2AMZ3c1q3kmK824LSGE4EwhVvD6Q6q7rKxxDgHyx0Tspk47uxMqgbcXj8CfI6B2nL6SZzqg==
+"@rainbow-o23/n2@1.0.54":
+  version "1.0.54"
+  resolved "https://registry.yarnpkg.com/@rainbow-o23/n2/-/n2-1.0.54.tgz#98af87493deb2acbd6541d3b2131da890badcefb"
+  integrity sha512-FDVxelVPARqkCnX3Dzx8VI0Ftx6HgEuzkt3l9X3259KA4RrUFwzU4R9Gqk0O4BXh/t74i0+R1KokcoWZ8eYXgQ==
   dependencies:
     "@nestjs/common" "^10.4.7"
     "@nestjs/core" "^10.4.7"
     "@nestjs/platform-express" "^10.4.7"
     "@nestjs/platform-socket.io" "^10.4.7"
     "@nestjs/websockets" "^10.4.7"
-    "@rainbow-o23/n1" "1.0.53"
+    "@rainbow-o23/n1" "1.0.54"
     cron "^3.1.9"
     dayjs "^1.11.13"
     nest-winston "^1.9.7"
@@ -1829,32 +1829,32 @@
     winston "^3.16.0"
     winston-daily-rotate-file "^5.0.0"
 
-"@rainbow-o23/n3@1.0.53":
-  version "1.0.53"
-  resolved "https://registry.yarnpkg.com/@rainbow-o23/n3/-/n3-1.0.53.tgz#d06b4b5ce312bbaed64d0cc562968bda69273ca3"
-  integrity sha512-nbLwvCV30pKIqKAoWdOzwQN4yETvyc727cMsl6gXvRXgji7drAfJZBHQl/Au3uUKlLud5uQ7LNyO9dPzGJ5X1Q==
+"@rainbow-o23/n3@1.0.54":
+  version "1.0.54"
+  resolved "https://registry.yarnpkg.com/@rainbow-o23/n3/-/n3-1.0.54.tgz#0c0394890b4240c92ab43fdf900cb7990aaa8092"
+  integrity sha512-ELlsC+qlZeveVYAdu/texM7CH7I3fzNHRHkccmDTddDqGkESWxH4ZHR6br3dAZNRTLJmkWp897AFn2LN5wDphg==
   dependencies:
-    "@rainbow-o23/n1" "1.0.53"
+    "@rainbow-o23/n1" "1.0.54"
     node-fetch "2.6.7"
     typeorm "^0.3.20"
     typescript "5.5.4"
 
-"@rainbow-o23/n4@1.0.53":
-  version "1.0.53"
-  resolved "https://registry.yarnpkg.com/@rainbow-o23/n4/-/n4-1.0.53.tgz#80d0f2f840b05630d5da4c4f1efe2d89f7f2d3c1"
-  integrity sha512-M9Y48kdblbbhU423kTdnL5JjAOCSlHSA2kKa8UlF7tRQoKuqUpQdIgrbtTxkTM9TMJr1zWGgH2nFI2wW8QN6Cg==
+"@rainbow-o23/n4@1.0.54":
+  version "1.0.54"
+  resolved "https://registry.yarnpkg.com/@rainbow-o23/n4/-/n4-1.0.54.tgz#2f16d12d08bcce433cada07027aeb5ee857bde8d"
+  integrity sha512-I3H9FdxZNu5OVfRdURSk9iuOV0hfAEV4rSwrl7mHCnkflc6nJJl7BZpM0V1EmcNOC/iZf9x5VhpJKyTbUME4zw==
   dependencies:
-    "@rainbow-o23/n3" "1.0.53"
+    "@rainbow-o23/n3" "1.0.54"
     js-yaml "^4.1.0"
 
-"@rainbow-o23/n90@1.0.53":
-  version "1.0.53"
-  resolved "https://registry.yarnpkg.com/@rainbow-o23/n90/-/n90-1.0.53.tgz#f80f33830b853ddb6595564286e82fb74da8922c"
-  integrity sha512-b24iX397D0bGjlO4tn6slpYeJHOZsswEAjXWdyDoVMMZIgZ0ojz03mDRwJMVxrFnHyy7CgWGXmvS3qgJpJ1dLw==
+"@rainbow-o23/n90@1.0.54":
+  version "1.0.54"
+  resolved "https://registry.yarnpkg.com/@rainbow-o23/n90/-/n90-1.0.54.tgz#cbd67a1adc1fec18266cb5598bb97267c8a7244a"
+  integrity sha512-FYG1bf8V08uVUN6jjd358ttkA2IJAzXOjTTzHJEeayvsJyMogzDbj70jShuMzLM3mtg1zLWLprwMkd4sufOYJg==
   dependencies:
-    "@rainbow-o23/n2" "1.0.53"
-    "@rainbow-o23/n3" "1.0.53"
-    "@rainbow-o23/n4" "1.0.53"
+    "@rainbow-o23/n2" "1.0.54"
+    "@rainbow-o23/n3" "1.0.54"
+    "@rainbow-o23/n4" "1.0.54"
     dotenv "^16.4.5"
     glob "^11.0.0"
 

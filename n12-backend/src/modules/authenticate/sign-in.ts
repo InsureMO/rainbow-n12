@@ -39,7 +39,7 @@ export const SignIn = () => {
 				&& ($.touch(data.tenantId).isNotBlank().ok() || $.touch(data.tenantCode).isNotBlank().ok());
 		})
 		.then(
-			Steps.loadOneBySQL<DataAndValidation, any>('FindTenantIdByCode')
+			Steps.loadOneBySQL<DataAndValidation, DataAndValidation>('FindTenantIdByCode')
 				.inputConvertBy<FindTenantQueryBasis>(async ($factor, _, $) => {
 					const {data} = $factor;
 					const filters = [];
@@ -62,7 +62,7 @@ export const SignIn = () => {
 				.datasource('')
 				.autonomousTransaction()
 				.ignoreStaticSql()
-				.outputConvertBy<DataAndValidation, DataAndValidation, FindTenantByCodeCriteria>(async ($result, $request) => {
+				.outputConvertBy<FindTenantByCodeCriteria>(async ($result, $request) => {
 					const $factor = $request.content;
 					$factor.data.tenantId = $result?.tenantId;
 					$factor.data.tenantCode = $result?.tenantCode;
