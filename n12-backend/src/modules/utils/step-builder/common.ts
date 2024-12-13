@@ -32,6 +32,9 @@ export abstract class StepBuilder<Opts extends PipelineStepBuilderOptions, I, O>
 	}
 }
 
+/**
+ * builder extends this means it can be ended directly without any further settings.
+ */
 export abstract class StepBuilderEndable<Opts extends PipelineStepBuilderOptions, I, O> extends StepBuilder<Opts, I, O> {
 	/**
 	 * default do nothing. throw error when step def is not valid.

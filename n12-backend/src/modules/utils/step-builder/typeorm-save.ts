@@ -1,9 +1,9 @@
 import {DefaultSteps, TypeOrmBySQLPipelineStepBuilderOptions} from '@rainbow-o23/n4';
 import {TypeOrmStepDataSourceBuilder, TypeOrmStepTransactionAndSqlBuilder} from './typeorm';
 
-export class TypeOrmLoadOneBySQLStepBuilder<I, O> extends TypeOrmStepDataSourceBuilder<TypeOrmBySQLPipelineStepBuilderOptions, I, O, TypeOrmStepTransactionAndSqlBuilder<I, O>> {
+export class TypeOrmSaveBySQLStepBuilder<I, O> extends TypeOrmStepDataSourceBuilder<TypeOrmBySQLPipelineStepBuilderOptions, I, O, TypeOrmStepTransactionAndSqlBuilder<I, O>> {
 	public constructor(name: string) {
-		super({name, use: DefaultSteps.TYPEORM_LOAD_ONE_BY_SQL});
+		super({name, use: DefaultSteps.TYPEORM_SAVE_BY_SQL});
 	}
 
 	protected createNextBuilder(): TypeOrmStepTransactionAndSqlBuilder<I, O> {

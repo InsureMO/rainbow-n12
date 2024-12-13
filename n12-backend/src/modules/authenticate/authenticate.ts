@@ -10,7 +10,8 @@ export const Authenticate = () => {
 			.testBy(async ($factor, _, $) => {
 				return $factor.authorization?.authorized !== true && provider.should($.$config);
 			})
-			.then(step1, ...steps);
+			.then(step1, ...steps)
+			.end();
 	};
 	const PrepareRequest = Steps.snippet<AuthorizationRequest, MightBeAuthorized>('PrepareAuthorizationRequest')
 		.execute(async ($factor) => {

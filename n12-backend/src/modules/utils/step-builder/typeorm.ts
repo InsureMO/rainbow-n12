@@ -1,8 +1,8 @@
 import {TypeOrmBySQLPipelineStepBuilderOptions, TypeOrmPipelineStepBuilderOptions} from '@rainbow-o23/n4';
-import {StepBuilder, StepBuilderEndable} from './common';
+import {StepBuilder} from './common';
 import {StepBuilderCatchCatchable, StepBuilderConvertInput} from './fragmentary';
 
-export class TypeOrmBySQLStepBuilder<Opts extends TypeOrmBySQLPipelineStepBuilderOptions, I, O> extends StepBuilderEndable<Opts, I, O> {
+export class TypeOrmStepSqlBuilder<Opts extends TypeOrmBySQLPipelineStepBuilderOptions, I, O> extends StepBuilder<Opts, I, O> {
 	public ignoreStaticSql(): StepBuilderCatchCatchable<Opts, I, O> {
 		this.options.sql = '@ignore';
 		return new StepBuilderCatchCatchable<Opts, I, O>(this.def);
@@ -14,7 +14,7 @@ export class TypeOrmBySQLStepBuilder<Opts extends TypeOrmBySQLPipelineStepBuilde
 	}
 }
 
-export abstract class TypeOrmTransactionStepBuilder<Opts extends TypeOrmPipelineStepBuilderOptions, I, O, NextBuilder extends StepBuilder<Opts, I, O>> extends StepBuilder<Opts, I, O> {
+export abstract class TypeOrmStepTransactionBuilder<Opts extends TypeOrmPipelineStepBuilderOptions, I, O, NextBuilder extends StepBuilder<Opts, I, O>> extends StepBuilder<Opts, I, O> {
 	public transaction(name: string): NextBuilder {
 		this.options.transaction = name;
 		return this.createNextBuilder();
@@ -28,7 +28,7 @@ export abstract class TypeOrmTransactionStepBuilder<Opts extends TypeOrmPipeline
 	protected abstract createNextBuilder(): NextBuilder
 }
 
-export abstract class TypeOrmDataSourceStepBuilder<Opts extends TypeOrmPipelineStepBuilderOptions, I, O, NextBuilder extends StepBuilder<Opts, I, O>> extends StepBuilderConvertInput<Opts, I, O> {
+export abstract class TypeOrmStepDataSourceBuilder<Opts extends TypeOrmPipelineStepBuilderOptions, I, O, NextBuilder extends StepBuilder<Opts, I, O>> extends StepBuilderConvertInput<Opts, I, O> {
 	public datasource(name: string): NextBuilder {
 		this.options.datasource = name;
 		return this.createNextBuilder();
@@ -37,8 +37,8 @@ export abstract class TypeOrmDataSourceStepBuilder<Opts extends TypeOrmPipelineS
 	protected abstract createNextBuilder(): NextBuilder;
 }
 
-export class TypeOrmTransactionAndSqlStepBuilder<I, O> extends TypeOrmTransactionStepBuilder<TypeOrmBySQLPipelineStepBuilderOptions, I, O, TypeOrmBySQLStepBuilder<TypeOrmBySQLPipelineStepBuilderOptions, I, O>> {
-	protected createNextBuilder(): TypeOrmBySQLStepBuilder<TypeOrmBySQLPipelineStepBuilderOptions, I, O> {
-		return new TypeOrmBySQLStepBuilder(this.def);
+export class TypeOrmStepTransactionAndSqlBuilder<I, O> extends TypeOrmStepTransactionBuilder<TypeOrmBySQLPipelineStepBuilderOptions, I, O, TypeOrmStepSqlBuilder<TypeOrmBySQLPipelineStepBuilderOptions, I, O>> {
+	protected createNextBuilder(): TypeOrmStepSqlBuilder<TypeOrmBySQLPipelineStepBuilderOptions, I, O> {
+		return new TypeOrmStepSqlBuilder<TypeOrmBySQLPipelineStepBuilderOptions, I, O>(this.def);
 	}
 }

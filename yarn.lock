@@ -1799,28 +1799,28 @@
     dayjs "^1.11.13"
     decimal.js "^10.4.3"
 
-"@rainbow-o23/n1@1.0.54":
-  version "1.0.54"
-  resolved "https://registry.yarnpkg.com/@rainbow-o23/n1/-/n1-1.0.54.tgz#fe0e87748d93219e4d55ea965b76e05273e3473b"
-  integrity sha512-pUJLj6+2w68xMuNhAkAWrtqpiuMAACeVw3GeTWgBEKppU8m+MJZPZr8/cE4C0kT5HMBdT0el2DJWloxpP746EQ==
+"@rainbow-o23/n1@1.0.55":
+  version "1.0.55"
+  resolved "https://registry.yarnpkg.com/@rainbow-o23/n1/-/n1-1.0.55.tgz#809792ea4669acce5828fc863ee07fd20ac14440"
+  integrity sha512-p4gTXPKeL02OtUDWRf8Z6dXoQtf+oa3IMf+7+CDIAxuespAck68K6onOMElf+Q33r/su+La03+weRUmzDz70sw==
   dependencies:
     "@rainbow-n19/n1" latest
     dayjs "^1.11.13"
     decimal.js "^10.4.3"
     mathjs "^13.2.1"
-    nanoid "3.3.7"
+    nanoid "3.3.8"
 
-"@rainbow-o23/n2@1.0.54":
-  version "1.0.54"
-  resolved "https://registry.yarnpkg.com/@rainbow-o23/n2/-/n2-1.0.54.tgz#98af87493deb2acbd6541d3b2131da890badcefb"
-  integrity sha512-FDVxelVPARqkCnX3Dzx8VI0Ftx6HgEuzkt3l9X3259KA4RrUFwzU4R9Gqk0O4BXh/t74i0+R1KokcoWZ8eYXgQ==
+"@rainbow-o23/n2@1.0.55":
+  version "1.0.55"
+  resolved "https://registry.yarnpkg.com/@rainbow-o23/n2/-/n2-1.0.55.tgz#e154d0a342b726d3889393b3e78ce8e0ffd39d57"
+  integrity sha512-yHEldrHVCePNG9B7KQUTMsa6evlbpdd4z4R5ORAsOnf6dDftUeEBxTpotXZPpl4w/bNST/qe1LZS6+I48JZwDA==
   dependencies:
     "@nestjs/common" "^10.4.7"
     "@nestjs/core" "^10.4.7"
     "@nestjs/platform-express" "^10.4.7"
     "@nestjs/platform-socket.io" "^10.4.7"
     "@nestjs/websockets" "^10.4.7"
-    "@rainbow-o23/n1" "1.0.54"
+    "@rainbow-o23/n1" "1.0.55"
     cron "^3.1.9"
     dayjs "^1.11.13"
     nest-winston "^1.9.7"
@@ -1829,32 +1829,32 @@
     winston "^3.16.0"
     winston-daily-rotate-file "^5.0.0"
 
-"@rainbow-o23/n3@1.0.54":
-  version "1.0.54"
-  resolved "https://registry.yarnpkg.com/@rainbow-o23/n3/-/n3-1.0.54.tgz#0c0394890b4240c92ab43fdf900cb7990aaa8092"
-  integrity sha512-ELlsC+qlZeveVYAdu/texM7CH7I3fzNHRHkccmDTddDqGkESWxH4ZHR6br3dAZNRTLJmkWp897AFn2LN5wDphg==
+"@rainbow-o23/n3@1.0.55":
+  version "1.0.55"
+  resolved "https://registry.yarnpkg.com/@rainbow-o23/n3/-/n3-1.0.55.tgz#6c510e9fe3fdba10bf781930dbd4d3d890cb3422"
+  integrity sha512-FBn74TROPgUwUQ1FtoZ0seEQt5qnyXzSOTWXpL8GlSwTgSF3BA7F47Ank1O7o5EsUKTZ+747XKR24Wx1yIB9Lw==
   dependencies:
-    "@rainbow-o23/n1" "1.0.54"
+    "@rainbow-o23/n1" "1.0.55"
     node-fetch "2.6.7"
     typeorm "^0.3.20"
     typescript "5.5.4"
 
-"@rainbow-o23/n4@1.0.54":
-  version "1.0.54"
-  resolved "https://registry.yarnpkg.com/@rainbow-o23/n4/-/n4-1.0.54.tgz#2f16d12d08bcce433cada07027aeb5ee857bde8d"
-  integrity sha512-I3H9FdxZNu5OVfRdURSk9iuOV0hfAEV4rSwrl7mHCnkflc6nJJl7BZpM0V1EmcNOC/iZf9x5VhpJKyTbUME4zw==
+"@rainbow-o23/n4@1.0.55":
+  version "1.0.55"
+  resolved "https://registry.yarnpkg.com/@rainbow-o23/n4/-/n4-1.0.55.tgz#9130c96fc51ace4484c33b9e94f51c1915fb8c29"
+  integrity sha512-jf+lwebQgm+2+3NuYlvqIIiIR53YkQNX6oV6WwIpxAKoxChFNppXf/Jt8rtPZIVqV+lfSVRk0CLzRy1K5NDB0Q==
   dependencies:
-    "@rainbow-o23/n3" "1.0.54"
+    "@rainbow-o23/n3" "1.0.55"
     js-yaml "^4.1.0"
 
-"@rainbow-o23/n90@1.0.54":
-  version "1.0.54"
-  resolved "https://registry.yarnpkg.com/@rainbow-o23/n90/-/n90-1.0.54.tgz#cbd67a1adc1fec18266cb5598bb97267c8a7244a"
-  integrity sha512-FYG1bf8V08uVUN6jjd358ttkA2IJAzXOjTTzHJEeayvsJyMogzDbj70jShuMzLM3mtg1zLWLprwMkd4sufOYJg==
+"@rainbow-o23/n90@1.0.55":
+  version "1.0.55"
+  resolved "https://registry.yarnpkg.com/@rainbow-o23/n90/-/n90-1.0.55.tgz#f0c74e070f3816ee0cd9aa7a4886d2e5212a2d88"
+  integrity sha512-Vf08e9+HsrtC3fJmzQFFDLGqX6KmeguW4z0d/lk74uCuf0Vt5m3RNfmgc/ZoIs/GPVyld6ww8wjT4IWLeC35YA==
   dependencies:
-    "@rainbow-o23/n2" "1.0.54"
-    "@rainbow-o23/n3" "1.0.54"
-    "@rainbow-o23/n4" "1.0.54"
+    "@rainbow-o23/n2" "1.0.55"
+    "@rainbow-o23/n3" "1.0.55"
+    "@rainbow-o23/n4" "1.0.55"
     dotenv "^16.4.5"
     glob "^11.0.0"
 
@@ -6517,7 +6517,12 @@ mz@^2.4.0:
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
 
-nanoid@3.3.7, nanoid@^3.3.7:
+nanoid@3.3.8:
+  version "3.3.8"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.8.tgz#b1be3030bee36aaff18bacb375e5cce521684baf"
+  integrity sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==
+
+nanoid@^3.3.7:
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.7.tgz#d0c301a691bc8d54efa0a2226ccf3fe2fd656bd8"
   integrity sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==
